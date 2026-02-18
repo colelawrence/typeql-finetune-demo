@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TypeQL Agent</title>
+  <style>
+    /* ─── Reset & tokens ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0f0f1a;
+      --surface:     #1a1a2e;
+      --surface2:    #22223a;
+      --border:      #2e2e50;
+      --accent:      #7c6af7;
+      --accent-dim:  #5a4fd6;
+      --text:        #e2e2f0;
+      --text-muted:  #7a7a9a;
+      --text-faint:  #40405a;
+      --green:       #6af798;
+      --red:         #f76a7c;
+      --yellow:      #f7c46a;
+      --cyan:        #6adef7;
+      --font-mono:   "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+      --font-sans:   -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --radius:      8px;
+      --radius-lg:   12px;
+      --shadow:      0 4px 24px rgba(0,0,0,0.5);
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ─── Layout ─── */
+    .page { max-width: 1600px; margin: 0 auto; padding: 24px 20px 48px; }
+
+    /* ─── Header ─── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .header-left h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-left p {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-top: 2px;
+    }
+
+    .header-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+    .header-link:hover { color: var(--text); border-color: var(--accent); }
+
+    /* ─── Input area ─── */
+    .input-section { margin-bottom: 28px; }
+
+    .textarea-wrapper {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      padding: 16px;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      line-height: 1.6;
+    }
+    textarea::placeholder { color: var(--text-faint); }
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(124,106,247,0.15);
+    }
+    textarea:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .input-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hint { color: var(--text-faint); font-size: 0.78rem; }
+
+    /* ─── Button ─── */
+    .btn-generate {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      padding: 10px 24px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s, opacity 0.2s;
+      white-space: nowrap;
+    }
+    .btn-generate:hover:not(:disabled) { background: var(--accent-dim); }
+    .btn-generate:active:not(:disabled) { transform: translateY(1px); }
+    .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    .loading .spinner { display: block; }
+    .loading .btn-icon { display: none; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Error banner ─── */
+    .error-banner {
+      display: none;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(247, 106, 124, 0.12);
+      border: 1px solid rgba(247, 106, 124, 0.4);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      color: #f7a0aa;
+      font-size: 0.875rem;
+    }
+    .error-banner.visible { display: flex; }
+    .error-banner svg { flex-shrink: 0; margin-top: 1px; }
+    .error-close {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      padding: 0 4px;
+      font-size: 1.1rem;
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+    .error-close:hover { opacity: 1; }
+
+    /* ─── Three-panel grid ─── */
+    .panels {
+      display: grid;
+      grid-template-columns: 25fr 50fr 25fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .panels { grid-template-columns: 1fr; }
+      .header-left h1 { font-size: 1.4rem; }
+    }
+
+    /* ─── Panel card ─── */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+    }
+    .panel-title .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .panel--schema .dot   { background: var(--cyan); }
+    .panel--queries .dot  { background: var(--green); }
+    .panel--explain .dot  { background: var(--yellow); }
+
+    /* ─── Copy button ─── */
+    .btn-copy {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.75rem;
+      padding: 4px 9px;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .btn-copy:hover { color: var(--text); border-color: var(--accent); background: rgba(124,106,247,0.08); }
+    .btn-copy.copied { color: var(--green); border-color: var(--green); }
+    .btn-copy:disabled { opacity: 0.35; cursor: default; }
+
+    /* ─── Panel body ─── */
+    .panel-body {
+      padding: 0;
+      flex: 1;
+      min-height: 160px;
+      position: relative;
+    }
+
+    /* Code area */
+    .code-block {
+      margin: 0;
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.65;
+      overflow-x: auto;
+      white-space: pre;
+      color: var(--text);
+      background: transparent;
+      min-height: 160px;
+    }
+
+    /* Explanation prose */
+    .prose {
+      padding: 16px;
+      font-size: 0.875rem;
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 160px;
+    }
+
+    /* Queries: each query separated */
+    .query-item {
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+    }
+    .query-item:last-child { border-bottom: none; }
+    .query-num {
+      font-size: 0.7rem;
+      color: var(--text-faint);
+      font-family: var(--font-mono);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .query-code {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-all;
+      color: var(--text);
+    }
+
+    /* Empty placeholder */
+    .placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 140px;
+      color: var(--text-faint);
+      font-size: 0.82rem;
+      font-style: italic;
+      padding: 16px;
+      text-align: center;
+    }
+
+    /* ─── Skeleton loading ─── */
+    .skeleton-wrap {
+      padding: 16px;
+      display: none;
+    }
+    .skeleton-wrap.visible { display: block; }
+
+    .skeleton-bar {
+      height: 12px;
+      border-radius: 6px;
+      background: var(--surface2);
+      margin-bottom: 10px;
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    .skeleton-bar:last-child { margin-bottom: 0; }
+    .skeleton-bar.w-full  { width: 100%; }
+    .skeleton-bar.w-3qtr  { width: 75%; }
+    .skeleton-bar.w-half  { width: 50%; }
+    .skeleton-bar.w-2qtr  { width: 60%; }
+    .skeleton-bar.w-sm    { width: 35%; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50%       { opacity: 0.9; }
+    }
+
+    /* stagger delays */
+    .skeleton-bar:nth-child(1) { animation-delay: 0s; }
+    .skeleton-bar:nth-child(2) { animation-delay: 0.1s; }
+    .skeleton-bar:nth-child(3) { animation-delay: 0.2s; }
+    .skeleton-bar:nth-child(4) { animation-delay: 0.3s; }
+    .skeleton-bar:nth-child(5) { animation-delay: 0.4s; }
+    .skeleton-bar:nth-child(6) { animation-delay: 0.5s; }
+
+    /* ─── TypeQL syntax highlight ─── */
+    .kw-keyword  { color: #a78bfa; }   /* violet — define/match/insert/delete etc */
+    .kw-type     { color: var(--cyan); }  /* entity/relation/attribute/value */
+    .kw-agg      { color: var(--yellow); } /* count/sum/mean/max/min etc */
+    .kw-punct    { color: var(--text-muted); }
+    .kw-string   { color: var(--green); }
+    .kw-comment  { color: var(--text-faint); font-style: italic; }
+    .kw-varname  { color: #f9a8d4; }    /* $variables */
+    .kw-num      { color: #fb923c; }
+
+    /* ─── Footer ─── */
+    .page-footer {
+      margin-top: 40px;
+      text-align: center;
+      color: var(--text-faint);
+      font-size: 0.78rem;
+    }
+    .page-footer a { color: var(--text-muted); text-decoration: none; }
+    .page-footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Header ── -->
+  <header class="header">
+    <div class="header-left">
+      <h1>TypeQL Agent</h1>
+      <p>Generate TypeQL schemas and queries from natural language</p>
+    </div>
+    <a class="header-link" href="https://typedb.com/docs/typeql/3.x/overview" target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      TypeQL 3.x Docs
+    </a>
+  </header>
+
+  <!-- ── Input ── -->
+  <section class="input-section">
+    <div class="textarea-wrapper">
+      <textarea
+        id="prompt"
+        autofocus
+        placeholder="Describe what you want to model or query. E.g. 'a supply chain with products, suppliers, and orders' or 'find all users who follow someone who liked a tweet about TypeDB'"
+        rows="5"
+      ></textarea>
+    </div>
+    <div class="input-footer">
+      <span class="hint">Press the button to generate — Shift+Enter adds a new line</span>
+      <button id="generate-btn" class="btn-generate" type="button">
+        <span class="btn-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+        </span>
+        <span class="spinner" id="spinner"></span>
+        <span id="btn-label">Generate</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ── Error banner ── -->
+  <div class="error-banner" id="error-banner" role="alert">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <span id="error-text"></span>
+    <button class="error-close" id="error-close" aria-label="Dismiss">&times;</button>
+  </div>
+
+  <!-- ── Three panels ── -->
+  <div class="panels">
+
+    <!-- Schema -->
+    <div class="panel panel--schema">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span class="dot"></span>
+          Schema
+        </div>
+        <button class="btn-copy" id="copy-schema" disabled title="Copy schema" aria-label="Copy schema to clipboard">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          Copy
+        </button>
+      </div>
+      <div class="panel-body">
+        <div class="skeleton-wrap" id="skel-schema">
+          <div class="skeleton-bar w-3qtr"></div>
+          <div class="skeleton-bar w-full"></div>
+          <div class="skeleton-bar w-half"></div>
+          <div class="skeleton-bar w-full"></div>
+          <div class="skeleton-bar w-2qtr"></div>
+          <div class="skeleton-bar w-3qtr"></div>
+        </div>
+        <div id="schema-output"><div class="placeholder">No schema generated yet</div></div>
+      </div>
+    </div>
+
+    <!-- Queries -->
+    <div class="panel panel--queries">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span class="dot"></span>
+          Queries
+        </div>
+        <button class="btn-copy" id="copy-queries" disabled title="Copy all queries" aria-label="Copy queries to clipboard">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          Copy all
+        </button>
+      </div>
+      <div class="panel-body">
+        <div class="skeleton-wrap" id="skel-queries">
+          <div class="skeleton-bar w-full"></div>
+          <div class="skeleton-bar w-3qtr"></div>
+          <div class="skeleton-bar w-full"></div>
+          <div class="skeleton-bar w-half"></div>
+          <div class="skeleton-bar w-full"></div>
+          <div class="skeleton-bar w-2qtr"></div>
+        </div>
+        <div id="queries-output"><div class="placeholder">No queries generated yet</div></div>
+      </div>
+    </div>
+
+    <!-- Explanation -->
+    <div class="panel panel--explain">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span class="dot"></span>
+          Explanation
+        </div>
+        <button class="btn-copy" id="copy-explain" disabled title="Copy explanation" aria-label="Copy explanation to clipboard">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          Copy
+        </button>
+      </div>
+      <div class="panel-body">
+        <div class="skeleton-wrap" id="skel-explain">
+          <div class="skeleton-bar w-full"></div>
+          <div class="skeleton-bar w-3qtr"></div>
+          <div class="skeleton-bar w-full"></div>
+          <div class="skeleton-bar w-half"></div>
+          <div class="skeleton-bar w-3qtr"></div>
+          <div class="skeleton-bar w-2qtr"></div>
+        </div>
+        <div id="explain-output"><div class="placeholder">No explanation yet</div></div>
+      </div>
+    </div>
+
+  </div><!-- /.panels -->
+
+  <footer class="page-footer">
+    Powered by <a href="https://typedb.com" target="_blank" rel="noopener">TypeDB</a> &amp;
+    <a href="https://typedb.com/docs/typeql/3.x/overview" target="_blank" rel="noopener">TypeQL 3.x</a>
+  </footer>
+</div><!-- /.page -->
+
+<script>
+  // ─── API URL ───────────────────────────────────────────────────────────────
+  // Override by setting window.TYPEQL_API_URL before this script runs,
+  // or set a <meta name="typeql-api-url" content="..."> tag.
+  // For local dev: http://localhost:8787
+  const API_URL =
+    window.TYPEQL_API_URL ||
+    document.querySelector('meta[name="typeql-api-url"]')?.content ||
+    'https://typeql-agent.<account>.workers.dev';
+
+  // ─── TypeQL syntax highlighter ────────────────────────────────────────────
+  const KW_QUERY    = new Set(['match','fetch','reduce','insert','delete','update','get','not','or','try','sort','limit','offset','groupby','select','put']);
+  const KW_DEFINE   = new Set(['define','undefine','redefine']);
+  const KW_STRUCT   = new Set(['sub','isa','has','owns','relates','plays','as','abstract','value','fun','return','with','let','is']);
+  const KW_TYPE     = new Set(['entity','relation','attribute']);
+  const KW_AGG      = new Set(['count','sum','mean','max','min','distinct','std']);
+  const KW_BOOL     = new Set(['true','false','none']);
+
+  /**
+   * Minimal TypeQL tokeniser → HTML.
+   * Processes the text character-by-character to avoid regex cross-contamination.
+   */
+  function highlightTypeQL(src) {
+    let out = '';
+    let i = 0;
+    const n = src.length;
+
+    function peek(offset = 0) { return src[i + offset] ?? ''; }
+    function eat() { return src[i++]; }
+
+    function span(cls, text) {
+      return `<span class="${cls}">${escHtml(text)}</span>`;
+    }
+
+    // Read while predicate holds
+    function readWhile(pred) {
+      let s = '';
+      while (i < n && pred(src[i])) s += src[i++];
+      return s;
+    }
+
+    while (i < n) {
+      const ch = src[i];
+
+      // Comment: # to end-of-line
+      if (ch === '#') {
+        const comment = readWhile(c => c !== '\n');
+        out += span('kw-comment', comment);
+        continue;
+      }
+
+      // String literal: "..." or '...'
+      if (ch === '"' || ch === "'") {
+        const q = eat();
+        let s = q;
+        while (i < n && src[i] !== q) {
+          if (src[i] === '\\') { s += src[i++]; }
+          s += src[i++] ?? '';
+        }
+        s += src[i] === q ? eat() : '';
+        out += span('kw-string', s);
+        continue;
+      }
+
+      // Variable: $identifier
+      if (ch === '$') {
+        eat();
+        const name = readWhile(c => /[\w\-]/.test(c));
+        out += span('kw-varname', '$' + name);
+        continue;
+      }
+
+      // Number literal
+      if (/[0-9]/.test(ch) || (ch === '-' && /[0-9]/.test(peek(1)))) {
+        const num = (ch === '-' ? eat() : '') + readWhile(c => /[0-9._]/.test(c));
+        out += span('kw-num', num);
+        continue;
+      }
+
+      // Identifier / keyword
+      if (/[a-zA-Z_]/.test(ch)) {
+        const word = readWhile(c => /[\w\-]/.test(c));
+        if (KW_DEFINE.has(word)) {
+          out += span('kw-keyword', word);
+        } else if (KW_QUERY.has(word)) {
+          out += span('kw-keyword', word);
+        } else if (KW_STRUCT.has(word)) {
+          out += span('kw-keyword', word);
+        } else if (KW_TYPE.has(word)) {
+          out += span('kw-type', word);
+        } else if (KW_AGG.has(word)) {
+          out += span('kw-agg', word);
+        } else if (KW_BOOL.has(word)) {
+          out += span('kw-num', word);
+        } else {
+          out += escHtml(word);
+        }
+        continue;
+      }
+
+      // Punctuation (colons, semicolons, braces, parens, comma)
+      if (/[;:,{}\[\]()]/.test(ch)) {
+        out += span('kw-punct', eat());
+        continue;
+      }
+
+      // Everything else: output as-is (whitespace, operators, etc.)
+      out += escHtml(eat());
+    }
+
+    return out;
+  }
+
+  function escHtml(s) {
+    return s
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  // ─── DOM refs ─────────────────────────────────────────────────────────────
+  const promptEl     = document.getElementById('prompt');
+  const generateBtn  = document.getElementById('generate-btn');
+  const btnLabel     = document.getElementById('btn-label');
+  const spinnerEl    = document.getElementById('spinner');
+  const errorBanner  = document.getElementById('error-banner');
+  const errorText    = document.getElementById('error-text');
+  const errorClose   = document.getElementById('error-close');
+
+  const schemaOut    = document.getElementById('schema-output');
+  const queriesOut   = document.getElementById('queries-output');
+  const explainOut   = document.getElementById('explain-output');
+
+  const skelSchema   = document.getElementById('skel-schema');
+  const skelQueries  = document.getElementById('skel-queries');
+  const skelExplain  = document.getElementById('skel-explain');
+
+  const copySchema   = document.getElementById('copy-schema');
+  const copyQueries  = document.getElementById('copy-queries');
+  const copyExplain  = document.getElementById('copy-explain');
+
+  // Clipboard text store (raw, un-highlighted)
+  let rawSchema  = '';
+  let rawQueries = [];  // string[]
+  let rawExplain = '';
+
+  // ─── Skeleton helpers ─────────────────────────────────────────────────────
+  function showSkeletons() {
+    [skelSchema, skelQueries, skelExplain].forEach(el => el.classList.add('visible'));
+    [schemaOut, queriesOut, explainOut].forEach(el => el.style.display = 'none');
+  }
+
+  function hideSkeletons() {
+    [skelSchema, skelQueries, skelExplain].forEach(el => el.classList.remove('visible'));
+    [schemaOut, queriesOut, explainOut].forEach(el => el.style.display = '');
+  }
+
+  // ─── Error banner ─────────────────────────────────────────────────────────
+  function showError(msg) {
+    errorText.textContent = msg;
+    errorBanner.classList.add('visible');
+  }
+  function hideError() {
+    errorBanner.classList.remove('visible');
+  }
+  errorClose.addEventListener('click', hideError);
+
+  // ─── Copy to clipboard ────────────────────────────────────────────────────
+  function setupCopy(btn, getText) {
+    btn.addEventListener('click', async () => {
+      const text = getText();
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.classList.add('copied');
+        const prev = btn.innerHTML;
+        btn.innerHTML = `
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Copied!`;
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = prev;
+        }, 2000);
+      } catch {
+        // Fallback: execCommand
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    });
+  }
+
+  setupCopy(copySchema,  () => rawSchema);
+  setupCopy(copyQueries, () => rawQueries.join('\n\n'));
+  setupCopy(copyExplain, () => rawExplain);
+
+  // ─── Render helpers ───────────────────────────────────────────────────────
+  function renderSchema(schema) {
+    if (!schema || !schema.trim()) {
+      schemaOut.innerHTML = '<div class="placeholder">No schema generated</div>';
+      copySchema.disabled = true;
+      return;
+    }
+    rawSchema = schema;
+    schemaOut.innerHTML = `<pre class="code-block">${highlightTypeQL(schema)}</pre>`;
+    copySchema.disabled = false;
+  }
+
+  function renderQueries(queries) {
+    if (!queries || queries.length === 0) {
+      queriesOut.innerHTML = '<div class="placeholder">No queries generated</div>';
+      copyQueries.disabled = true;
+      return;
+    }
+    rawQueries = queries;
+    const html = queries.map((q, idx) => `
+      <div class="query-item">
+        <div class="query-num">Query ${idx + 1}</div>
+        <div class="query-code">${highlightTypeQL(q)}</div>
+      </div>`).join('');
+    queriesOut.innerHTML = html;
+    copyQueries.disabled = false;
+  }
+
+  function renderExplain(text) {
+    if (!text || !text.trim()) {
+      explainOut.innerHTML = '<div class="placeholder">No explanation</div>';
+      copyExplain.disabled = true;
+      return;
+    }
+    rawExplain = text;
+    // Simple paragraph splitting
+    const paras = text.split(/\n{2,}/).map(p => p.trim()).filter(Boolean);
+    explainOut.innerHTML = `<div class="prose">${paras.map(p => `<p style="margin-bottom:0.85em">${escHtml(p)}</p>`).join('')}</div>`;
+    copyExplain.disabled = false;
+  }
+
+  // ─── Loading state ────────────────────────────────────────────────────────
+  function setLoading(isLoading) {
+    generateBtn.disabled = isLoading;
+    promptEl.disabled    = isLoading;
+    if (isLoading) {
+      generateBtn.classList.add('loading');
+      btnLabel.textContent = 'Generating…';
+    } else {
+      generateBtn.classList.remove('loading');
+      btnLabel.textContent = 'Generate';
+    }
+  }
+
+  // ─── Main generate ────────────────────────────────────────────────────────
+  async function generate() {
+    const prompt = promptEl.value.trim();
+    if (!prompt) {
+      promptEl.focus();
+      return;
+    }
+
+    hideError();
+    setLoading(true);
+    showSkeletons();
+
+    // Reset copy buttons
+    [copySchema, copyQueries, copyExplain].forEach(b => b.disabled = true);
+
+    try {
+      const res = await fetch(`${API_URL}/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt }),
+      });
+
+      const data = await res.json().catch(() => ({ error: 'Invalid JSON response from server' }));
+
+      if (!res.ok) {
+        const msg = res.status === 429
+          ? 'Rate limited — please wait a minute.'
+          : (data.error || `Server error (HTTP ${res.status})`);
+        showError(msg);
+        hideSkeletons();
+        // Show empty placeholders
+        renderSchema('');
+        renderQueries([]);
+        renderExplain('');
+        return;
+      }
+
+      hideSkeletons();
+      renderSchema(data.schema  ?? '');
+      renderQueries(data.queries ?? []);
+      renderExplain(data.explanation ?? '');
+
+    } catch (err) {
+      hideSkeletons();
+      renderSchema('');
+      renderQueries([]);
+      renderExplain('');
+      const msg = err instanceof TypeError
+        ? `Network error — check that the API is reachable at ${API_URL}`
+        : (err?.message || 'Unknown error');
+      showError(msg);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // ─── Event wiring ─────────────────────────────────────────────────────────
+  generateBtn.addEventListener('click', generate);
+
+  // Enter in textarea should NOT submit; Shift+Enter adds newline (default).
+  // Plain Enter: do nothing special (no submit), just let the browser handle newline.
+  promptEl.addEventListener('keydown', e => {
+    // no submit on Enter — button only
+  });
+
+  // Auto-focus on load
+  promptEl.focus();
+</script>
+</body>
+</html>
