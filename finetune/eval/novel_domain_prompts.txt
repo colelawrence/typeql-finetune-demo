@@ -1,0 +1,20 @@
+I need a schema for tracking clinical trials with patients, treatments, outcomes, and adverse events
+Design a TypeQL schema for a hospital system: patients, doctors, wards, diagnoses, prescriptions, and lab results
+Build a schema for a genomics research database tracking DNA samples, gene variants, sequencing runs, and patient phenotypes
+I need a schema and queries for an agricultural supply chain: farms, crops, harvests, storage facilities, and distribution routes
+Create a TypeQL schema for precision farming: fields, soil sensors, irrigation events, weather stations, and crop yield records
+Design a schema for a space mission database: missions, spacecraft, astronauts, launch windows, telemetry readings, and orbital parameters
+I need to model a music production workflow: artists, albums, tracks, recording sessions, producers, mixing engineers, and release schedules
+Build a schema for a music streaming platform: songs, playlists, listeners, listening sessions, genres, and royalty payments
+Design a TypeQL schema for a legal case management system: cases, parties, lawyers, court dates, filings, rulings, and appeals
+I need a schema for tracking academic research: papers, authors, institutions, citations, funding grants, and peer review rounds
+Create a schema for a real estate platform: properties, listings, agents, buyers, offers, transactions, and mortgage applications
+Design a schema for a manufacturing defect tracking system: products, components, inspections, defect reports, root causes, and corrective actions
+I need a TypeQL schema for an IoT platform: devices, sensors, telemetry streams, alerts, firmware versions, and maintenance schedules
+Build a schema for tracking open source projects: repositories, contributors, pull requests, issues, releases, and dependency graphs
+Create a schema for a restaurant chain: locations, menus, menu items, ingredients, suppliers, orders, and customer reviews
+I need a schema for an e-learning platform: courses, lessons, students, enrollments, quiz attempts, certificates, and instructors
+Design a TypeQL schema for a logistics company: shipments, warehouses, trucks, drivers, delivery routes, and customs declarations
+Build a schema for a financial portfolio tracker: investors, portfolios, assets, transactions, dividends, and performance benchmarks
+I need a schema for a climate research database: weather stations, atmospheric measurements, climate models, simulation runs, and anomaly events
+Design a schema for a social care agency: clients, care workers, care plans, home visits, assessments, and emergency contacts
