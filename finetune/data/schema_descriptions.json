@@ -1,0 +1,167 @@
+{
+  "bluesky": [
+    "Create a graph database where users can interact with each other and each interaction is captured and stored.",
+    "A network of users where each user entity can have properties like label, key, x, y, and color, and they can interact with other users.",
+    "Set up a database to map social interactions between users, keeping track of each user's unique properties.",
+    "Design a user interaction system, tracking connections using nodes and edges, where users are represented with specific attributes and their interactions form the edges.",
+    "A graph of people with attributes who can connect and interact with each other, capturing the dynamic between them.",
+    "Imagine a platform where every individual is a node and every action between them is an interaction, showing how they connect in a colorful web.",
+    "A quick and efficient way to represent users who can interact with each other, using graph edges to show connections.",
+    "Build a social graph that tracks users and their interactions, detailing each user's characteristics and how they relate to others.",
+    "Design a graph model capturing users as nodes with rich attributes and their interactions as directed edges, helping visualize social dynamics."
+  ],
+  "buzzoverflow": [
+    "Build a platform where users can post questions, and each question can be tagged for easy categorization.",
+    "An online Q&A forum where people ask their queries and tag them with relevant topics.",
+    "Create a database for a question-and-answer site where users can submit questions along with tags for better searching.",
+    "Imagine a community where users post questions, identify them with tags, and track which are most popular or have been answered.",
+    "A social network for knowledge-sharing, connecting questions from users to topic-based tags.",
+    "A graph-based database: users represented as nodes can ask questions and each question can connect to tags.",
+    "Build something like a digital notice board where questions are linked to tags for organization and users can gain reputation.",
+    "It's like a massive online brainstorming session where questions are categorized using tags chosen by users.",
+    "Picture a hub of curiosity, where anyone can pose a question, add some tags for easy finding, and keep an eye on the buzz it generates."
+  ],
+  "companies": [
+    "Build a graph database that tracks companies, their leadership, competitors, subsidiaries, and suppliers, along with the industries they operate in.",
+    "A complex network of organizations features entities like companies, cities, countries, people, industries, and various business articles with sentiment analysis.",
+    "Design a system to catalog people by their role in businesses and map the relationships between companies and their locations and market sectors.",
+    "Imagine a platform where each organization is linked with its board members, CEO, competitors, and industry categories, and is also associated with cities and countries.",
+    "Create a data model where organizations are nodes connected through a variety of relationships, such as having CEOs or board members, being located in cities, and belonging to industry categories.",
+    "A database of interconnected entities comprising people, their roles, organizations, and geographical presence, plus articles that reference these organizations.",
+    "Let's set up a network capturing companies with details on their leadership, business sectors, locations, competitors, and relevant news articles.",
+    "Build a graph to log people as individuals or as part of organizations, pinpoint company headquarters and track how these relate to geographic regions.",
+    "A visual map of the corporate world showing organizations with their associated people, industry sectors, locations, news mentions, and relationships with other companies."
+  ],
+  "fincen": [
+    "Build a graph database that tracks which financial reports are filed by entities, and which countries these entities are associated with.",
+    "A network to manage financial filings, linking entities to their originating and beneficiary details, with country-specific information.",
+    "Design a system that records entities, their financial filings, and the countries they operate in.",
+    "Create a database for financial compliance, which captures filings with details like originator and beneficiary banks, while associating each entity with a country.",
+    "A graph database focused on finance, mapping entities to filings and connecting them to their respective countries of operation.",
+    "Hey, can you set up a database where we can easily see what financial documents entities have filed and which countries they're related to?",
+    "This needs to be a comprehensive model tracking filings initiated by entities and linking them to relevant countries and beneficiary details.",
+    "Set up a graph where nodes represent entities and filings, and edges show the relationships between these entities, their filings, and associated countries.",
+    "A financial reporting system that associates each filing with the entity that originated it and the countries involved."
+  ],
+  "gameofthrones": [
+    "Build a network graph to map interactions between key figures in a fantasy series, showing the importance and roles of each based on various centrality measures.",
+    "Create a database that tracks the complex relationships among pivotal characters in a medieval-inspired saga, using different interaction types to signify their dynamic connections throughout the series.",
+    "A detailed web of interactions among fictional characters from a well-known TV show, highlighting how often and significantly they connect from book to book.",
+    "Imagine a graph where every dot is a character from a popular fantasy series, and the lines connecting them show how they interact across different volumes. Some characters are more central than others, and you'd need to measure these relationships with specific metrics like page rank and centrality.",
+    "In a universe as intricate as a fantasy epic, every character's influence and interactions are crucial. Design a graph database model where characters are nodes, and their connections through various types of interactions mark their significance and relationships over time.",
+    "A sprawling tapestry of acquaintances between characters from a famous saga, each linked through numerous interactions that evolve over different parts of the story.",
+    "Envision a massive network of individuals from a fantastical world, where the strength and number of their interactions are pivotal in understanding the narrative's complexity.",
+    "Design a structure to visualize how each character in a sprawling fantasy interacts with others, with nodes representing characters and edges showing different interaction types across books.",
+    "A database that captures the essence of a fantasy series through a graph of character interactions, emphasizing analytic metrics like centrality and page rank to reveal the narrative's underlying social dynamics."
+  ],
+  "grandstack": [
+    "Create a graph database to manage information about businesses, users, and their reviews.",
+    "A social network of businesses where users can write reviews and each business falls under specific categories.",
+    "Store businesses with their addresses and locations, and link users who write reviews to those businesses.",
+    "Imagine a platform where users can rate and review businesses, with each business being classified under certain categories.",
+    "Build a system that captures user-generated reviews of businesses and categorizes each business accordingly.",
+    "We need a database where businesses are categorized, users write reviews, and reviews are linked back to businesses.",
+    "Set up nodes for businesses and users, connect them with review details, and classify businesses into categories.",
+    "The database should store business details, user reviews, and categorize each business type.",
+    "How can we organize user reviews for businesses while ensuring each is neatly classified into its related category?"
+  ],
+  "movies": [
+    "Create a graph database to capture information about movies, including their titles, release dates, and the people involved in production.",
+    "A film database where each movie is connected to its actors, directors, writers, and producers, along with user reviews and social connections.",
+    "Build a network that links individuals to the movies they've acted in, directed, wrote, reviewed, or produced.",
+    "For each person in the film industry, track their birthdate and name, and link them to the movies they have influenced in various roles.",
+    "A social network for movie enthusiasts, connecting people through films they've contributed to, reviewed, or followed.",
+    "Model a movie database capturing detailed connections between films and those who make them, reflecting the collaborative nature of the industry.",
+    "Design a graph structure with nodes representing films and people, and edges denoting their professional relationships like acting, directing, or reviewing.",
+    "Capture the essence of the film industry by mapping out who acts in, directs, or reviews each movie, and see how people in the industry are interconnected.",
+    "Imagine a movie universe where each film is a central node, with edges reaching out to all the people who brought it to life and those who follow them."
+  ],
+  "neoflix": [
+    "Create a database where users can rate movies and videos, connecting them to a rich network of genres, keywords, and production details.",
+    "A streaming platform that organizes movies and videos by genres, languages, production companies, and collections, featuring ratings from users.",
+    "Design a graph model for a media streaming service that links users, films, languages, genres, countries, and subscriptions.",
+    "In this entertainment database, movies and videos are associated with various genres, production companies, and are rated by users.",
+    "Build a network where movies and videos are connected through keywords and genres, and users interact by providing ratings.",
+    "Set up a graph database that categorizes films by collections, languages, and countries of production, with users rating each piece of media.",
+    "Think of a streaming service where every video and movie is tagged with genres, keywords, and languages, and users can rate them.",
+    "Imagine a media catalog where films and videos, starred and crewed by people, are grouped by genres and collections, and users can leave ratings.",
+    "A complex web of media content linking movies, videos, users, and subscriptions through production details, languages, and genre associations."
+  ],
+  "network": [
+    "Build a network topology database that includes data centers, routers, switches, and machines, all connected through interfaces and ports. Ensure machines can run applications, processes, and services with dependencies.",
+    "Imagine a network management system where datacenters contain racks of machines and network equipment, and applications have dependencies on processes and services. Machines have specific types with RAM and disk configurations.",
+    "Create a system to model a complex network infrastructure with elements like routers and interfaces that interconnect, and software dependencies that ensure smooth operations across data centers.",
+    "A network architecture database featuring data centers housing racks, which contain machines running various software and applications dependent on each other. Networks route connections via interfaces.",
+    "Model a network consisting of interconnected switches, routers, and machines, with everything from software dependencies to process instances being mapped.",
+    "Set up a graph that represents data centers as entities that hold racks and routers, while machines within these racks execute applications, each depending on various processes and services.",
+    "Picture a network system where applications need specific processes and services to function, and data centers manage multiple zones containing routers, interfaces, and racks.",
+    "A comprehensive network graph detailing how machines run different software versions, applications, and services, all while connected through interfaces linking routers and switches.",
+    "Design a database for a network's infrastructure, emphasizing how data centers organize network elements, and how software dependencies and versioning impact application deployment."
+  ],
+  "northwind": [
+    "Create a database to manage an inventory system where customers place orders for products, and products belong to specific categories and are supplied by vendors.",
+    "A supply chain network connecting customers to the orders they make, detailing each product, its supplier, and its category.",
+    "Track how customers purchase items, which are delivered from suppliers and belong to defined categories.",
+    "In this setup, you have customers placing orders, each consisting of products, which in turn are supplied by various suppliers. Products are categorized for easy management.",
+    "Build a network model that links each customer to their order history, assigns products to categories, and associates products with their suppliers.",
+    "A transactional system capturing customer orders, detailing the products ordered, their categories, and the suppliers providing them.",
+    "Design a product-based graph where nodes represent products, categories, customers, suppliers, and orders, interconnected to reflect real-world relationships.",
+    "Imagine a system where customers buy items, and each item is linked to its category and supplier. Orders contain all the info about what's included and where it ships to.",
+    "Set up a retail management graph where each supplier supplies products, customers purchase orders, and each product is categorized for efficient tracking."
+  ],
+  "offshoreleaks": [
+    "Create a graph database to track offshore financial entities, linking them to their registered addresses and intermediaries.",
+    "A complex web of offshore entities and their connections, capturing various forms of similarities and shared identifiers.",
+    "Design a system that reflects the intricate relationships between entities, officers, addresses, intermediaries, and others in offshore leaks data.",
+    "We need a network that shows how officers relate to companies and if they share names or IDs with others.",
+    "An investigative dataset where each node represents key offshore roles like entities, officers, and addresses, and connections denote relationships such as registration or similarity.",
+    "This setup involves entities linked by registration addresses and shared traits, with intermediaries acting as bridges between them.",
+    "Imagine a graph where intermediaries, officers, and corporate entities are all interconnected, showcasing financial networks across borders.",
+    "A detailed map displaying how different addresses and intermediaries are tied to offshore companies, supported by officer links and shared identities.",
+    "Construct a graph showing entities connected through shared names or addresses, illuminating potential common connections in offshore dealings."
+  ],
+  "recommendations": [
+    "Create a database to recommend movies based on user ratings and genres.",
+    "A movie recommendation system where users can rate films, and films are categorized by genre.",
+    "Build a graph database connecting users, movies, actors, and directors to generate personalized movie suggestions.",
+    "The system should include nodes for films, users, actors, directors, and genres, with edges representing ratings, roles in movies, and genre associations.",
+    "Imagine a platform where users can rate movies, and these ratings help determine film recommendations based on actors and directors involved.",
+    "In this setup, each movie is linked to both its genre and the individuals (actors and directors) associated with it, while users provide ratings.",
+    "An entertainment app that combines user ratings with actor and director data to recommend similar movies.",
+    "Design a recommendation engine that takes into account user preferences, film genres, and the filmographies of actors and directors.",
+    "Users rate movies, and the database uses these ratings along with information about genres and film contributors to suggest new viewing options."
+  ],
+  "stackoverflow2": [
+    "Create a graph database that models a Q&A platform, where users can ask questions, and other users can provide answers and comments.",
+    "A platform for developers to share knowledge: users post questions tagged by topics, receive answers, and engage through comments.",
+    "Design a system where each query can be linked to multiple answers and comments, and where users interact by posing questions or providing solutions.",
+    "Imagine a community-driven space for technical discussions, where questions are categorized by tags and user contributions are recorded through their activity like asking, answering, and commenting.",
+    "A collaborative question-and-answer forum with labeled connections between users, the questions they submit, the answers they provide, and the tags associated with each query.",
+    "Develop a platform that mimics an online forum: users raise questions, supply answers, and give feedback through comments, all connected in a graph structure.",
+    "Set up a digital environment where every question has a unique URL and can be linked to answers and comments, which are also tied back to users.",
+    "Think of it like an interactive site where topics are organized by tags, and users can contribute by posting questions, giving answers, and discussing through comments.",
+    "An interconnected network of questions, tags, and user interactions, where you can track which questions are answered or commented on by users."
+  ],
+  "twitch": [
+    "Create a graph database to manage live streaming data, including details about streams, users, games, languages, and teams.",
+    "A platform where users can watch live streams, moderated by certain users, and categorized by games and languages.",
+    "Map out the connections between users, streams, games, and teams, capturing who chats, moderates, and participates in VIP activities on the platform.",
+    "Users can chat and engage in streams about different games, with options to follow teams and view streams in their preferred language.",
+    "Set up a database to track streaming activities, such as which user is watching or moderating a stream and the games played during a broadcast.",
+    "Imagine a dynamic environment where users, streams, and games are interconnected, and users can chat, moderate, or follow streams, all while being aware of team affiliations and language preferences.",
+    "Build a networked system where each stream is linked to a game and a language, and users can act as moderators or VIPs within these streams.",
+    "A comprehensive graph structure for understanding the interactions and roles of users within a streaming service, highlighting their chatting and moderating activities.",
+    "You need a database to support a streaming platform so that users' interactions with streams, including their roles and preferences, are well-documented and easily accessible."
+  ],
+  "twitter": [
+    "Create a graph database for a social media platform similar to Twitter, where users can follow or interact with each other, post tweets, and engage with hashtags and links.",
+    "A digital space where individuals share short messages, or tweets, and interact by following each other, using hashtags, and linking out to other content.",
+    "Visualize a network of connections between users, tweets, and various elements like hashtags and links. Include user attributes such as location and follower count.",
+    "Imagine a platform where anyone can broadcast thoughts through short posts, connect with others by following them, and highlight topics through hashtags — sound familiar?",
+    "Develop a graph model for a social platform where interactions include posting tweets, following users, and tagging content with hashtags. Users should have attributes like follower count and location.",
+    "A microblogging service that hinges on short user posts called tweets, where users can follow each other and engage in mentions, retweets, and more.",
+    "Set up a graph database to capture how users post tweets, mention each other, and utilize different sources and hashtags for their content.",
+    "Picture a networked world where people amplify each other, share quick updates, and mark conversations with tags. It's all about who you follow and who follows you.",
+    "Design a system to track user interactions on a public messaging platform, mapping how users post, mention, and engage with content in various ways."
+  ]
+}
