@@ -1,0 +1,25 @@
+name = "typeql-agent"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[build]
+command = "bun run scripts/bundle-prompt.ts"
+
+# Rate limit: 10 req/min per IP
+# Note: Cloudflare rate limiting is configured via dashboard, but document the intent here
+# [[rules]]
+# expression = "true"
+# action = "rateLimit"
+# rateLimit = { simple = { period = 60, requests_per_period = 10, response = { status_code = 429 } } }
+
+[vars]
+OPENAI_MODEL = "gpt-4o-mini-2024-07-18"  # Override with fine-tuned model ID after training
+
+# Vectorize bindings (wired in bead 08)
+# [[vectorize]]
+# binding = "EXAMPLES_INDEX"
+# index_name = "typeql-examples"
+# [[vectorize]]
+# binding = "DOCS_INDEX"
+# index_name = "typeql-docs"

@@ -1,0 +1,16 @@
+{
+  "name": "typeql-agent-worker",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "bun run scripts/check-prompt-lock.ts && wrangler deploy",
+    "bundle-prompt": "bun run scripts/bundle-prompt.ts"
+  },
+  "dependencies": {
+    "openai": "^4.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.0.0",
+    "wrangler": "^3.0.0"
+  }
+}
