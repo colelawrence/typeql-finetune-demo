@@ -1,0 +1,9 @@
+{
+  "model_id": "ft:gpt-4.1-nano-2025-04-14:phosphor-co:typeql-agent:DAm0p4nR",
+  "job_id": "ftjob-CJ6HZvDHGyrcPobDZj9zuRGg",
+  "prompt_sha256": "6c00cbd7565ea17072da44db84f36939ff36100941f0232c51108eb422d1ebe8",
+  "created_at": "2026-02-18T22:30:00Z",
+  "base_model": "gpt-4.1-nano-2025-04-14",
+  "trained_tokens": 24395517,
+  "final_validation_loss": 0.1
+}

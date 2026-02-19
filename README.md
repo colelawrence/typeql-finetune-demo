@@ -16,6 +16,8 @@ TypeQL Agent lets developers describe their data model or query intent in plain 
 
 [https://typeql-agent.pages.dev](https://typeql-agent.pages.dev)
 
+> **Worker API:** `https://typeql-agent.p6r.workers.dev`
+
 ---
 
 ## Architecture
