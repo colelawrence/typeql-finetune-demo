@@ -111,8 +111,8 @@ async function handleGenerate(request: Request, env: Env): Promise<Response> {
     // system message — matching the training format: "...\n\nSchema:\n<tql>"
     const schemaSection = body.schema ? `\n\nSchema:\n${body.schema}` : "";
     const modeInstruction = body.schema
-      ? `\n\nIMPORTANT: A TypeQL schema has been provided above. Do NOT generate a new schema. Write TypeQL queries against the provided schema only. Set the "schema" field to an empty string in your JSON response.`
-      : `\n\nNo schema has been provided. You must define a TypeQL schema as part of your response in the "schema" field.`;
+      ? `\n\nIMPORTANT: A TypeQL schema has been provided above. Do NOT generate a new schema. Write TypeQL queries against the provided schema only. Set the "schema" field to an empty string in your JSON response.\n\nAlways provide a detailed "explanation" that walks through your reasoning: which schema types and relations you used, what TypeQL patterns or techniques you applied (e.g. reduce/groupby for aggregation, sort+limit for top-N, negation with 'not', regex with 'like', computed values with 'let'), and why the query structure matches the user's intent.`
+      : `\n\nNo schema has been provided. You must define a TypeQL schema as part of your response in the "schema" field.\n\nAlways provide a detailed "explanation" that walks through your reasoning: what schema design choices you made and why, which TypeQL patterns or techniques you applied in the queries, and how the schema and queries work together to satisfy the user's request.`;
     const systemContent = SYSTEM_PROMPT + schemaSection + modeInstruction + docSection;
     const userContent = fewShotSection
       ? `${fewShotSection}User request: ${body.prompt}`
