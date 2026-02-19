@@ -8,6 +8,11 @@ export interface Env {
   DOCS_INDEX: VectorizeIndex;
 }
 
+/** Assert an invariant — fail immediately with a clear message rather than silently degrade. */
+function invariant(condition: unknown, message: string): asserts condition {
+  if (!condition) throw new Error(`Invariant violation: ${message}`);
+}
+
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -68,6 +73,11 @@ function buildDocContext(matches: VectorizeMatch[]): string {
 }
 
 async function handleGenerate(request: Request, env: Env): Promise<Response> {
+  invariant(env.OPENAI_API_KEY, "OPENAI_API_KEY secret is not set");
+  invariant(env.OPENAI_MODEL, "OPENAI_MODEL var is not set — refusing to fall back to a default model");
+  invariant(env.EXAMPLES_INDEX, "EXAMPLES_INDEX Vectorize binding is missing");
+  invariant(env.DOCS_INDEX, "DOCS_INDEX Vectorize binding is missing");
+
   let body: { prompt?: string; schema?: string };
   try {
     body = await request.json<{ prompt?: string; schema?: string }>();
@@ -84,27 +94,16 @@ async function handleGenerate(request: Request, env: Env): Promise<Response> {
   const timeout = setTimeout(() => controller.abort(), 25_000);
 
   try {
-    // Step 1: Embed user prompt + parallel Vectorize queries (if indexes are populated)
-    let fewShotSection = "";
-    let docSection = "";
+    // Step 1: Embed user prompt + Vectorize RAG retrieval
+    const embedding = await embedPrompt(client, body.prompt);
 
-    try {
-      const embedding = await embedPrompt(client, body.prompt);
+    const [examplesResult, docsResult] = await Promise.all([
+      env.EXAMPLES_INDEX.query(embedding, { topK: 8, returnMetadata: "all" }),
+      env.DOCS_INDEX.query(embedding, { topK: 2, returnMetadata: "all" }),
+    ]);
 
-      const [examplesResult, docsResult] = await Promise.all([
-        env.EXAMPLES_INDEX
-          ? env.EXAMPLES_INDEX.query(embedding, { topK: 8, returnMetadata: "all" })
-          : Promise.resolve({ matches: [] }),
-        env.DOCS_INDEX
-          ? env.DOCS_INDEX.query(embedding, { topK: 2, returnMetadata: "all" })
-          : Promise.resolve({ matches: [] }),
-      ]);
-
-      fewShotSection = buildFewShotExamples(examplesResult.matches);
-      docSection = buildDocContext(docsResult.matches);
-    } catch {
-      // RAG failure is non-fatal — proceed without retrieval
-    }
+    const fewShotSection = buildFewShotExamples(examplesResult.matches);
+    const docSection = buildDocContext(docsResult.matches);
 
     // Step 2: Build prompt and call model
     // If a schema is provided (e.g. from a training sample), inject it into the
@@ -120,7 +119,7 @@ async function handleGenerate(request: Request, env: Env): Promise<Response> {
 
     const completion = await client.chat.completions.create(
       {
-        model: env.OPENAI_MODEL || "gpt-4.1-mini-2025-04-14",
+        model: env.OPENAI_MODEL,
         messages: [
           { role: "system", content: systemContent },
           { role: "user", content: userContent },
@@ -155,28 +154,22 @@ async function handleGenerate(request: Request, env: Env): Promise<Response> {
       return jsonResponse({ error: "Empty response from model" }, 500);
     }
 
-    let parsed: { schema?: string; queries?: string[]; explanation?: string };
+    let parsed: Record<string, unknown>;
     try {
       parsed = JSON.parse(content);
     } catch {
       return jsonResponse({ error: "Model returned non-JSON content" }, 500);
     }
 
-    if (
-      typeof parsed.schema === "undefined" ||
-      typeof parsed.queries === "undefined" ||
-      typeof parsed.explanation === "undefined"
-    ) {
-      return jsonResponse(
-        { error: "Model response missing required fields (schema, queries, explanation)" },
-        500
-      );
-    }
+    // Strict JSON schema guarantees shape, but validate anyway — fail clearly, don't degrade.
+    invariant(typeof parsed.schema === "string", `Expected schema:string, got ${typeof parsed.schema}`);
+    invariant(Array.isArray(parsed.queries), `Expected queries:array, got ${typeof parsed.queries}`);
+    invariant(typeof parsed.explanation === "string", `Expected explanation:string, got ${typeof parsed.explanation}`);
 
     return jsonResponse({
-      schema: parsed.schema,
-      queries: parsed.queries,
-      explanation: parsed.explanation,
+      schema: parsed.schema as string,
+      queries: parsed.queries as string[],
+      explanation: parsed.explanation as string,
     });
   } catch (err: unknown) {
     clearTimeout(timeout);

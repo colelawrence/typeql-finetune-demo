@@ -964,7 +964,6 @@
   let viewMode        = 'generated'; // 'generated' | 'training'
   let schemaSource    = 'none'; // 'none' | 'sample' | 'user' | 'generated'
   let activeDomain    = 'all';
-  let activeSampleIdx = null;   // index in SAMPLES of selected card
   let displayedSamples = [];    // current cards shown
 
   // Raw text for copy
@@ -1051,9 +1050,9 @@
     currentSample = sample;
     promptEl.value = sample.question;
 
-    // Immediately show the sample's schema in the schema textarea
-    renderSchema(sample.schema ?? '');
-    setSchemaVisualState(sample.schema ? 'sample' : 'none');
+    // Every sample has a schema — show it immediately
+    renderSchema(sample.schema);
+    setSchemaVisualState('sample');
 
     // If we switch to a new sample after having generated, reset to generated mode
     // and hide the training tab (will re-enable after next generate)
@@ -1069,12 +1068,6 @@
   shuffleBtn.addEventListener('click', () => {
     displayedSamples = pickDisplayed(activeDomain);
     renderSampleCards();
-    // If we reshuffled and had a selected card that's no longer shown, don't auto-deselect
-    // the textarea but remove visual highlight
-    sampleCardsEl.querySelectorAll('.sample-card').forEach(c => {
-      // re-check if this card matches currentSample
-      // (cards are recreated so no old refs)
-    });
   });
 
   // ─── Skeleton helpers ───────────────────────────────────────────────────────
@@ -1234,8 +1227,8 @@
       copyExplain.disabled = true;
     } else if (mode === 'generated' && generatedData) {
       trainingBadge.classList.remove('visible');
-      renderQueries(generatedData.queries ?? []);
-      renderExplain(generatedData.explanation ?? '');
+      renderQueries(generatedData.queries);
+      renderExplain(generatedData.explanation);
     }
   }
 
@@ -1304,16 +1297,16 @@
           : (data.error || `Server error (HTTP ${res.status})`);
         showError(msg);
         hideSkeletons();
-        if (!userSchema) { renderSchema(''); setSchemaVisualState('none'); }
         renderQueries([]);
         renderExplain('');
         return;
       }
 
+      // Worker guarantees { schema: string, queries: string[], explanation: string }
       generatedData = {
-        schema:      userSchema || (data.schema ?? ''),
-        queries:     data.queries     ?? [],
-        explanation: data.explanation ?? '',
+        schema:      userSchema || data.schema,
+        queries:     data.queries,
+        explanation: data.explanation,
       };
 
       hideSkeletons();
@@ -1342,7 +1335,6 @@
 
     } catch (err) {
       hideSkeletons();
-      renderSchema('');
       renderQueries([]);
       renderExplain('');
       const msg = err instanceof TypeError
@@ -1377,7 +1369,8 @@
     rawSchema = schemaInputEl.value;
     copySchema.disabled = !schemaInputEl.value.trim();
     if (schemaInputEl.value.trim()) {
-      if (schemaSource !== 'sample') setSchemaVisualState('user');
+      // Any edit means it's user-owned now, even if it started as a sample
+      setSchemaVisualState('user');
     } else {
       setSchemaVisualState('none');
     }
