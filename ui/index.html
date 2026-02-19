@@ -1218,14 +1218,10 @@
     tabGenerated.setAttribute('aria-selected', mode === 'generated');
     tabTraining.setAttribute('aria-selected', mode === 'training');
 
+    // Only toggle queries + explanation — schema is the input context, never changes with view mode
     if (mode === 'training' && currentSample) {
       trainingBadge.classList.add('visible');
-      schemaInputEl.value = currentSample.schema ?? '';
-      schemaInputEl.readOnly = true;
-      rawSchema = currentSample.schema ?? '';
-      copySchema.disabled = !rawSchema;
       renderQueries([currentSample.typeql]);
-      // Explanation panel shows training note
       explainOut.innerHTML = `<div class="prose">
         <p style="color:var(--green);font-weight:600;margin-bottom:0.6em">
           ✓ Ground truth from training set
@@ -1236,13 +1232,8 @@
         </p>
       </div>`;
       copyExplain.disabled = true;
-      rawExplain = '';
     } else if (mode === 'generated' && generatedData) {
       trainingBadge.classList.remove('visible');
-      schemaInputEl.value = generatedData.schema ?? '';
-      schemaInputEl.readOnly = false;
-      rawSchema = generatedData.schema ?? '';
-      copySchema.disabled = !rawSchema;
       renderQueries(generatedData.queries ?? []);
       renderExplain(generatedData.explanation ?? '');
     }
