@@ -9,6 +9,7 @@
 # Node
 node_modules/
 worker/node_modules/
+bun.lock
 worker/bun.lock
 
 # Beads / context (project management internals)
