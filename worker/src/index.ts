@@ -24,8 +24,8 @@ function jsonResponse(body: unknown, status = 200): Response {
   });
 }
 
-async function handleHealth(): Promise<Response> {
-  return jsonResponse({ ok: true, timestamp: new Date().toISOString() });
+async function handleHealth(env: Env): Promise<Response> {
+  return jsonResponse({ ok: true, timestamp: new Date().toISOString(), model: env.OPENAI_MODEL });
 }
 
 /** Embed user prompt via OpenAI text-embedding-3-small (512 dims) */
@@ -195,7 +195,7 @@ export default {
     }
 
     if (url.pathname === "/health" && method === "GET") {
-      return handleHealth();
+      return handleHealth(env);
     }
 
     if (url.pathname === "/generate" && method === "POST") {
