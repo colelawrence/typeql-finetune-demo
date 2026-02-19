@@ -68,9 +68,9 @@ function buildDocContext(matches: VectorizeMatch[]): string {
 }
 
 async function handleGenerate(request: Request, env: Env): Promise<Response> {
-  let body: { prompt?: string };
+  let body: { prompt?: string; schema?: string };
   try {
-    body = await request.json<{ prompt?: string }>();
+    body = await request.json<{ prompt?: string; schema?: string }>();
   } catch {
     return jsonResponse({ error: "Invalid JSON body" }, 400);
   }
@@ -107,7 +107,10 @@ async function handleGenerate(request: Request, env: Env): Promise<Response> {
     }
 
     // Step 2: Build prompt and call model
-    const systemContent = SYSTEM_PROMPT + docSection;
+    // If a schema is provided (e.g. from a training sample), inject it into the
+    // system message — matching the training format: "...\n\nSchema:\n<tql>"
+    const schemaSection = body.schema ? `\n\nSchema:\n${body.schema}` : "";
+    const systemContent = SYSTEM_PROMPT + schemaSection + docSection;
     const userContent = fewShotSection
       ? `${fewShotSection}User request: ${body.prompt}`
       : body.prompt;

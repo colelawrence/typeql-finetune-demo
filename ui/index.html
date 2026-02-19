@@ -988,6 +988,11 @@
     currentSample = sample;
     promptEl.value = sample.question;
 
+    // Immediately show the sample's schema in the schema panel
+    if (sample.schema) {
+      renderSchema(sample.schema);
+    }
+
     // If we switch to a new sample after having generated, reset to generated mode
     // and hide the training tab (will re-enable after next generate)
     if (generatedData) {
@@ -1189,7 +1194,10 @@
       const res = await fetch(`${API_URL}/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({
+          prompt,
+          ...(currentSample?.schema ? { schema: currentSample.schema } : {})
+        }),
       });
 
       const data = await res.json().catch(() => ({ error: 'Invalid JSON response from server' }));
