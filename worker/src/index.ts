@@ -110,7 +110,10 @@ async function handleGenerate(request: Request, env: Env): Promise<Response> {
     // If a schema is provided (e.g. from a training sample), inject it into the
     // system message — matching the training format: "...\n\nSchema:\n<tql>"
     const schemaSection = body.schema ? `\n\nSchema:\n${body.schema}` : "";
-    const systemContent = SYSTEM_PROMPT + schemaSection + docSection;
+    const modeInstruction = body.schema
+      ? `\n\nIMPORTANT: A TypeQL schema has been provided above. Do NOT generate a new schema. Write TypeQL queries against the provided schema only. Set the "schema" field to an empty string in your JSON response.`
+      : `\n\nNo schema has been provided. You must define a TypeQL schema as part of your response in the "schema" field.`;
+    const systemContent = SYSTEM_PROMPT + schemaSection + modeInstruction + docSection;
     const userContent = fewShotSection
       ? `${fewShotSection}User request: ${body.prompt}`
       : body.prompt;

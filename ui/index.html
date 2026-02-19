@@ -392,6 +392,58 @@
     .panel--queries .dot  { background: var(--green); }
     .panel--explain .dot  { background: var(--yellow); }
 
+    /* ─── Schema textarea (editable) ─── */
+    .schema-textarea {
+      width: 100%;
+      min-height: 160px;
+      max-height: 500px;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      padding: 16px;
+      resize: vertical;
+      outline: none;
+      line-height: 1.65;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .schema-textarea::placeholder { color: var(--text-faint); font-size: 0.82rem; }
+    .schema-textarea:focus { background: rgba(124,106,247,0.03); }
+
+    /* Schema mode badges */
+    .schema-mode-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      display: none;
+    }
+    .schema-mode-badge.badge--provided { display: inline; background: rgba(106,222,247,0.15); color: var(--cyan); border: 1px solid rgba(106,222,247,0.3); }
+    .schema-mode-badge.badge--generated { display: inline; background: rgba(106,247,152,0.10); color: var(--green); border: 1px solid rgba(106,247,152,0.3); }
+
+    .btn-clear-schema {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      transition: color 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+      display: none;
+    }
+    .btn-clear-schema:hover { color: var(--red); border-color: var(--red); }
+
+    /* Schema panel visual states */
+    .panel--schema.schema--provided { border-color: rgba(106,222,247,0.35); }
+    .panel--schema.schema--generated { border-color: rgba(106,247,152,0.25); }
+
     /* ─── Query tab toggle ─── */
     .query-tabs {
       display: none;
@@ -646,12 +698,14 @@
   <div class="panels" id="panels-container">
 
     <!-- Schema -->
-    <div class="panel panel--schema">
+    <div class="panel panel--schema" id="schema-panel">
       <div class="panel-header">
         <div class="panel-title">
           <span class="dot"></span>
           Schema
         </div>
+        <span class="schema-mode-badge" id="schema-mode-badge"></span>
+        <button class="btn-clear-schema" id="clear-schema" title="Clear schema (switch to full-generation mode)">✕ Clear</button>
         <button class="btn-copy" id="copy-schema" disabled title="Copy schema" aria-label="Copy schema to clipboard">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
@@ -669,7 +723,12 @@
           <div class="skeleton-bar w-2qtr"></div>
           <div class="skeleton-bar w-3qtr"></div>
         </div>
-        <div id="schema-output"><div class="placeholder">No schema generated yet</div></div>
+        <textarea
+          id="schema-input"
+          class="schema-textarea"
+          placeholder="Paste a TypeQL schema here, or leave empty to auto-generate one"
+          spellcheck="false"
+        ></textarea>
       </div>
     </div>
 
@@ -878,7 +937,10 @@
   const errorBanner      = document.getElementById('error-banner');
   const errorText        = document.getElementById('error-text');
   const errorClose       = document.getElementById('error-close');
-  const schemaOut        = document.getElementById('schema-output');
+  const schemaInputEl    = document.getElementById('schema-input');
+  const schemaPanelEl    = document.getElementById('schema-panel');
+  const schemaBadgeEl    = document.getElementById('schema-mode-badge');
+  const clearSchemaBtn   = document.getElementById('clear-schema');
   const queriesOut       = document.getElementById('queries-output');
   const explainOut       = document.getElementById('explain-output');
   const skelSchema       = document.getElementById('skel-schema');
@@ -900,6 +962,7 @@
   let currentSample   = null;   // selected training sample or null
   let generatedData   = null;   // { schema, queries, explanation }
   let viewMode        = 'generated'; // 'generated' | 'training'
+  let schemaSource    = 'none'; // 'none' | 'sample' | 'user' | 'generated'
   let activeDomain    = 'all';
   let activeSampleIdx = null;   // index in SAMPLES of selected card
   let displayedSamples = [];    // current cards shown
@@ -988,10 +1051,9 @@
     currentSample = sample;
     promptEl.value = sample.question;
 
-    // Immediately show the sample's schema in the schema panel
-    if (sample.schema) {
-      renderSchema(sample.schema);
-    }
+    // Immediately show the sample's schema in the schema textarea
+    renderSchema(sample.schema ?? '');
+    setSchemaVisualState(sample.schema ? 'sample' : 'none');
 
     // If we switch to a new sample after having generated, reset to generated mode
     // and hide the training tab (will re-enable after next generate)
@@ -1017,14 +1079,23 @@
 
   // ─── Skeleton helpers ───────────────────────────────────────────────────────
   function showSkeletons() {
-    [skelSchema, skelQueries, skelExplain].forEach(el => el.classList.add('visible'));
-    [schemaOut, queriesOut, explainOut].forEach(el => el.style.display = 'none');
+    const hasUserSchema = schemaInputEl.value.trim().length > 0;
+    if (!hasUserSchema) {
+      skelSchema.classList.add('visible');
+      schemaInputEl.style.display = 'none';
+    }
+    skelQueries.classList.add('visible');
+    skelExplain.classList.add('visible');
+    queriesOut.style.display = 'none';
+    explainOut.style.display = 'none';
     trainingBadge.classList.remove('visible');
   }
 
   function hideSkeletons() {
     [skelSchema, skelQueries, skelExplain].forEach(el => el.classList.remove('visible'));
-    [schemaOut, queriesOut, explainOut].forEach(el => el.style.display = '');
+    schemaInputEl.style.display = '';
+    queriesOut.style.display = '';
+    explainOut.style.display = '';
   }
 
   // ─── Error banner ───────────────────────────────────────────────────────────
@@ -1071,16 +1142,41 @@
   setupCopy(copyQueries, () => rawQueries.join('\n\n'));
   setupCopy(copyExplain, () => rawExplain);
 
+  // ─── Schema visual state ─────────────────────────────────────────────────────
+  function setSchemaVisualState(source) {
+    schemaSource = source;
+    schemaPanelEl.classList.remove('schema--provided', 'schema--generated');
+    schemaBadgeEl.className = 'schema-mode-badge';
+    clearSchemaBtn.style.display = 'none';
+
+    if (source === 'sample') {
+      schemaPanelEl.classList.add('schema--provided');
+      schemaBadgeEl.classList.add('badge--provided');
+      schemaBadgeEl.textContent = 'Sample';
+      clearSchemaBtn.style.display = 'inline-block';
+    } else if (source === 'user') {
+      schemaPanelEl.classList.add('schema--provided');
+      schemaBadgeEl.classList.add('badge--provided');
+      schemaBadgeEl.textContent = 'User';
+      clearSchemaBtn.style.display = 'inline-block';
+    } else if (source === 'generated') {
+      schemaPanelEl.classList.add('schema--generated');
+      schemaBadgeEl.classList.add('badge--generated');
+      schemaBadgeEl.textContent = 'Generated';
+    }
+    // 'none' → no badge, no clear button
+  }
+
   // ─── Render helpers ─────────────────────────────────────────────────────────
   function renderSchema(schema) {
     if (!schema || !schema.trim()) {
-      schemaOut.innerHTML = '<div class="placeholder">No schema generated</div>';
+      schemaInputEl.value = '';
       copySchema.disabled = true;
       rawSchema = '';
       return;
     }
     rawSchema = schema;
-    schemaOut.innerHTML = `<pre class="code-block">${highlightTypeQL(schema)}</pre>`;
+    schemaInputEl.value = schema;
     copySchema.disabled = false;
   }
 
@@ -1124,7 +1220,10 @@
 
     if (mode === 'training' && currentSample) {
       trainingBadge.classList.add('visible');
-      renderSchema(currentSample.schema);
+      schemaInputEl.value = currentSample.schema ?? '';
+      schemaInputEl.readOnly = true;
+      rawSchema = currentSample.schema ?? '';
+      copySchema.disabled = !rawSchema;
       renderQueries([currentSample.typeql]);
       // Explanation panel shows training note
       explainOut.innerHTML = `<div class="prose">
@@ -1140,7 +1239,10 @@
       rawExplain = '';
     } else if (mode === 'generated' && generatedData) {
       trainingBadge.classList.remove('visible');
-      renderSchema(generatedData.schema ?? '');
+      schemaInputEl.value = generatedData.schema ?? '';
+      schemaInputEl.readOnly = false;
+      rawSchema = generatedData.schema ?? '';
+      copySchema.disabled = !rawSchema;
       renderQueries(generatedData.queries ?? []);
       renderExplain(generatedData.explanation ?? '');
     }
@@ -1190,13 +1292,16 @@
 
     [copySchema, copyQueries, copyExplain].forEach(b => b.disabled = true);
 
+    // Read schema from the editable textarea
+    const userSchema = schemaInputEl.value.trim();
+
     try {
       const res = await fetch(`${API_URL}/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           prompt,
-          ...(currentSample?.schema ? { schema: currentSample.schema } : {})
+          ...(userSchema ? { schema: userSchema } : {})
         }),
       });
 
@@ -1208,20 +1313,30 @@
           : (data.error || `Server error (HTTP ${res.status})`);
         showError(msg);
         hideSkeletons();
-        renderSchema('');
+        if (!userSchema) { renderSchema(''); setSchemaVisualState('none'); }
         renderQueries([]);
         renderExplain('');
         return;
       }
 
       generatedData = {
-        schema:      data.schema      ?? '',
+        schema:      userSchema || (data.schema ?? ''),
         queries:     data.queries     ?? [],
         explanation: data.explanation ?? '',
       };
 
       hideSkeletons();
-      renderSchema(generatedData.schema);
+
+      if (userSchema) {
+        // User provided schema — keep it in place, don't overwrite
+        // Preserve the current schema source (sample or user)
+        if (schemaSource !== 'sample') setSchemaVisualState('user');
+      } else {
+        // Worker generated schema — show it
+        renderSchema(generatedData.schema);
+        setSchemaVisualState(generatedData.schema ? 'generated' : 'none');
+      }
+
       renderQueries(generatedData.queries);
       renderExplain(generatedData.explanation);
 
@@ -1251,11 +1366,29 @@
   // ─── Event wiring ───────────────────────────────────────────────────────────
   generateBtn.addEventListener('click', generate);
 
-  // Clear sample selection when user manually edits the textarea
+  // Clear sample selection when user manually edits the prompt textarea
   promptEl.addEventListener('input', () => {
     if (currentSample && promptEl.value !== currentSample.question) {
       currentSample = null;
       sampleCardsEl.querySelectorAll('.sample-card').forEach(c => c.classList.remove('selected'));
+    }
+  });
+
+  // Schema textarea events
+  clearSchemaBtn.addEventListener('click', () => {
+    schemaInputEl.value = '';
+    rawSchema = '';
+    copySchema.disabled = true;
+    setSchemaVisualState('none');
+  });
+
+  schemaInputEl.addEventListener('input', () => {
+    rawSchema = schemaInputEl.value;
+    copySchema.disabled = !schemaInputEl.value.trim();
+    if (schemaInputEl.value.trim()) {
+      if (schemaSource !== 'sample') setSchemaVisualState('user');
+    } else {
+      setSchemaVisualState('none');
     }
   });
 
