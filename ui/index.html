@@ -82,6 +82,160 @@
     }
     .header-link:hover { color: var(--text); border-color: var(--accent); }
 
+    /* ─── Sample Picker ─── */
+    .picker-section {
+      margin-bottom: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+    }
+
+    .picker-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .picker-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    .btn-shuffle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 4px 9px;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+      line-height: 1.4;
+    }
+    .btn-shuffle:hover { color: var(--text); border-color: var(--accent); background: rgba(124,106,247,0.08); }
+
+    /* Domain filter bar */
+    .domain-filter-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .domain-filter-bar::-webkit-scrollbar { height: 4px; }
+    .domain-filter-bar::-webkit-scrollbar-track { background: transparent; }
+    .domain-filter-bar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .domain-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface2);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 4px 12px;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+      font-family: var(--font-sans);
+      flex-shrink: 0;
+    }
+    .domain-pill:hover {
+      color: var(--text);
+      border-color: var(--accent);
+      background: rgba(124,106,247,0.08);
+    }
+    .domain-pill.active {
+      color: #fff;
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* Sample cards grid */
+    .sample-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 8px;
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .sample-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 11px 14px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+      animation: cardIn 0.18s ease both;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+    .sample-card:nth-child(2) { animation-delay: 0.04s; }
+    .sample-card:nth-child(3) { animation-delay: 0.08s; }
+    .sample-card:nth-child(4) { animation-delay: 0.12s; }
+    .sample-card:nth-child(5) { animation-delay: 0.16s; }
+    .sample-card:nth-child(6) { animation-delay: 0.20s; }
+
+    .sample-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--card-accent, var(--accent));
+      border-radius: 0 2px 2px 0;
+    }
+
+    .sample-card:hover {
+      border-color: var(--card-accent, var(--accent));
+      background: rgba(124,106,247,0.06);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+
+    .sample-card.selected {
+      border-color: var(--card-accent, var(--accent));
+      background: rgba(124,106,247,0.10);
+    }
+
+    .card-domain-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--card-accent, var(--text-muted));
+      opacity: 0.85;
+    }
+
+    .card-question {
+      font-size: 0.83rem;
+      color: var(--text);
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
     /* ─── Input area ─── */
     .input-section { margin-bottom: 28px; }
 
@@ -194,6 +348,7 @@
     @media (max-width: 768px) {
       .panels { grid-template-columns: 1fr; }
       .header-left h1 { font-size: 1.4rem; }
+      .sample-cards { grid-template-columns: 1fr; }
     }
 
     /* ─── Panel card ─── */
@@ -211,9 +366,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 16px;
+      padding: 10px 16px;
       border-bottom: 1px solid var(--border);
       background: var(--surface2);
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .panel-title {
@@ -235,6 +392,50 @@
     .panel--queries .dot  { background: var(--green); }
     .panel--explain .dot  { background: var(--yellow); }
 
+    /* ─── Query tab toggle ─── */
+    .query-tabs {
+      display: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .query-tabs.visible { display: flex; }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 4px 10px;
+      transition: color 0.15s, background 0.15s;
+      font-family: var(--font-sans);
+      white-space: nowrap;
+    }
+    .tab-btn + .tab-btn { border-left: 1px solid var(--border); }
+    .tab-btn:hover:not(:disabled) { color: var(--text); background: rgba(124,106,247,0.08); }
+    .tab-btn.tab-active { background: var(--accent); color: #fff; }
+    .tab-btn:disabled { opacity: 0.35; cursor: default; }
+
+    /* Training badge in panel body */
+    .training-badge {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      margin: 10px 16px 0;
+      background: rgba(106, 247, 152, 0.08);
+      border: 1px solid rgba(106, 247, 152, 0.25);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 0.75rem;
+      color: #6af798;
+      font-weight: 500;
+    }
+    .training-badge.visible { display: flex; }
+
     /* ─── Copy button ─── */
     .btn-copy {
       display: inline-flex;
@@ -248,6 +449,7 @@
       font-size: 0.75rem;
       padding: 4px 9px;
       transition: color 0.15s, border-color 0.15s, background 0.15s;
+      flex-shrink: 0;
     }
     .btn-copy:hover { color: var(--text); border-color: var(--accent); background: rgba(124,106,247,0.08); }
     .btn-copy.copied { color: var(--green); border-color: var(--green); }
@@ -355,13 +557,13 @@
     .skeleton-bar:nth-child(6) { animation-delay: 0.5s; }
 
     /* ─── TypeQL syntax highlight ─── */
-    .kw-keyword  { color: #a78bfa; }   /* violet — define/match/insert/delete etc */
-    .kw-type     { color: var(--cyan); }  /* entity/relation/attribute/value */
-    .kw-agg      { color: var(--yellow); } /* count/sum/mean/max/min etc */
+    .kw-keyword  { color: #a78bfa; }
+    .kw-type     { color: var(--cyan); }
+    .kw-agg      { color: var(--yellow); }
     .kw-punct    { color: var(--text-muted); }
     .kw-string   { color: var(--green); }
     .kw-comment  { color: var(--text-faint); font-style: italic; }
-    .kw-varname  { color: #f9a8d4; }    /* $variables */
+    .kw-varname  { color: #f9a8d4; }
     .kw-num      { color: #fb923c; }
 
     /* ─── Footer ─── */
@@ -392,18 +594,33 @@
     </a>
   </header>
 
+  <!-- ── Sample Picker ── -->
+  <section class="picker-section" id="picker-section">
+    <div class="picker-header">
+      <span class="picker-label">✦ Try an example</span>
+      <button id="shuffle-btn" class="btn-shuffle" title="Shuffle samples">🎲 Shuffle</button>
+    </div>
+    <!-- Domain filter bar -->
+    <div class="domain-filter-bar" id="domain-filter-bar">
+      <!-- populated by JS -->
+    </div>
+    <!-- Sample cards -->
+    <div class="sample-cards" id="sample-cards">
+      <!-- populated by JS -->
+    </div>
+  </section>
+
   <!-- ── Input ── -->
   <section class="input-section">
     <div class="textarea-wrapper">
       <textarea
         id="prompt"
-        autofocus
         placeholder="Describe what you want to model or query. E.g. 'a supply chain with products, suppliers, and orders' or 'find all users who follow someone who liked a tweet about TypeDB'"
         rows="5"
       ></textarea>
     </div>
     <div class="input-footer">
-      <span class="hint">Press the button to generate — Shift+Enter adds a new line</span>
+      <span class="hint">Press the button to generate — or click a sample above to pre-fill</span>
       <button id="generate-btn" class="btn-generate" type="button">
         <span class="btn-icon">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -426,7 +643,7 @@
   </div>
 
   <!-- ── Three panels ── -->
-  <div class="panels">
+  <div class="panels" id="panels-container">
 
     <!-- Schema -->
     <div class="panel panel--schema">
@@ -463,6 +680,11 @@
           <span class="dot"></span>
           Queries
         </div>
+        <!-- Generated / Training toggle — shown after first generate with a sample -->
+        <div class="query-tabs" id="query-tabs" role="tablist" aria-label="Query view">
+          <button class="tab-btn tab-active" id="tab-generated" role="tab" aria-selected="true">Generated</button>
+          <button class="tab-btn" id="tab-training" role="tab" aria-selected="false" disabled title="Select a sample first">Training</button>
+        </div>
         <button class="btn-copy" id="copy-queries" disabled title="Copy all queries" aria-label="Copy queries to clipboard">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
@@ -472,6 +694,14 @@
         </button>
       </div>
       <div class="panel-body">
+        <!-- Training ground-truth badge -->
+        <div class="training-badge" id="training-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          Ground truth from training set
+        </div>
         <div class="skeleton-wrap" id="skel-queries">
           <div class="skeleton-bar w-full"></div>
           <div class="skeleton-bar w-3qtr"></div>
@@ -521,27 +751,43 @@
 </div><!-- /.page -->
 
 <script>
-  // ─── API URL ───────────────────────────────────────────────────────────────
-  // Override by setting window.TYPEQL_API_URL before this script runs,
-  // or set a <meta name="typeql-api-url" content="..."> tag.
-  // For local dev: http://localhost:8787
+  // ─── Inlined samples data ──────────────────────────────────────────────────
+  const SAMPLES = [{"domain":"bluesky","question":"Which users have a color of '#3CB371' and an area less than 3? Limit to 5 results.","typeql":"match\n$u isa user, has color \"#3CB371\", has area $a;\n$a < 3.0;\nlimit 5;\nfetch {\n  \"handle\": $u.handle,\n  \"key\": $u.user_key,\n  \"y\": $u.y_coordinate,\n  \"color\": $u.color,\n  \"x\": $u.x_coordinate,\n  \"area\": $u.area,\n  \"size\": $u.size\n};","schema":"define\n  # Attributes\n  attribute handle value string;\n  attribute user_key value string;\n  attribute x_coordinate value double;\n  attribute y_coordinate value double;\n  attribute color value string;\n  attribute area value double;\n  attribute size value double;\n  attribute weight value double;\n  attribute og_weight value integer;\n  attribute interaction_key value string;\n\n  # Entities\n  entity user,\n    owns handle,\n    owns user_key @key,\n    owns x_coordinate,\n    owns y_coordinate,\n    owns color,\n    owns area,\n    owns size,\n    plays interacted:source_user,\n    plays interacted:target_user;\n\n  # Relations\n  relation interacted,\n    relates source_user,\n    relates target_user,\n    owns weight,\n    owns og_weight,\n    owns size,\n    owns interaction_key;"},{"domain":"bluesky","question":"Which 3 users have an area greater than 5?","typeql":"match\n$u isa user, has area $a;\n$a > 5;\nsort $a desc;\nlimit 3;\nfetch {\n  \"user\": $u.handle,\n  \"area\": $a\n};","schema":"define\n  # Attributes\n  attribute handle value string;\n  attribute user_key value string;\n  attribute x_coordinate value double;\n  attribute y_coordinate value double;\n  attribute color value string;\n  attribute area value double;\n  attribute size value double;\n  attribute weight value double;\n  attribute og_weight value integer;\n  attribute interaction_key value string;\n\n  # Entities\n  entity user,\n    owns handle,\n    owns user_key @key,\n    owns x_coordinate,\n    owns y_coordinate,\n    owns color,\n    owns area,\n    owns size,\n    plays interacted:source_user,\n    plays interacted:target_user;\n\n  # Relations\n  relation interacted,\n    relates source_user,\n    relates target_user,\n    owns weight,\n    owns og_weight,\n    owns size,\n    owns interaction_key;"},{"domain":"buzzoverflow","question":"What are the top 5 questions tagged with 'aws-lambda'?","typeql":"match\n$q isa question;\n$t isa tag, has tag_name \"aws-lambda\";\ntagged (tagged_question: $q, tag: $t);\n$q has score $score;\nsort $score desc;\nlimit 5;\nfetch {\n  \"title\": $q.title,\n  \"link\": $q.link,\n  \"score\": $score\n};","schema":"define\n  # Attributes\n  attribute favorites value integer;\n  attribute answered value boolean;\n  attribute text value string;\n  attribute link value string;\n  attribute created_at value datetime;\n  attribute title value string;\n  attribute question_id value integer;\n  attribute up_votes value integer;\n  attribute score value integer;\n  attribute down_votes value integer;\n  attribute tag_name value string;\n  attribute image value string;\n  attribute user_link value string;\n  attribute user_id value integer;\n  attribute reputation value integer;\n  attribute display_name value string;\n  attribute answer_id value integer;\n\n  # Entities\n  entity question,\n    owns favorites,\n    owns answered,\n    owns text,\n    owns link,\n    owns created_at,\n    owns title,\n    owns question_id @key,\n    owns up_votes,\n    owns score,\n    owns down_votes,\n    plays tagged:tagged_question,\n    plays asked:asked_question;\n\n  entity tag,\n    owns tag_name @key,\n    plays tagged:tag;\n\n  entity user,\n    owns image,\n    owns user_link,\n    owns user_id @key,\n    owns reputation,\n    owns display_name,\n    plays asked:asker;\n\n  entity answer,\n    owns answer_id @key,\n    owns created_at;\n\n  # Relations\n  relation tagged,\n    relates tagged_question,\n    relates tag;\n\n  relation asked,\n    relates asker,\n    relates asked_question;"},{"domain":"buzzoverflow","question":"How many users have asked a question with exactly 0 favorites?","typeql":"match\n$u isa user;\n$q isa question, has favorites 0;\nasked (asker: $u, asked_question: $q);\nselect $u;\ndistinct;\nreduce $count = count;","schema":"define\n  # Attributes\n  attribute favorites value integer;\n  attribute answered value boolean;\n  attribute text value string;\n  attribute link value string;\n  attribute created_at value datetime;\n  attribute title value string;\n  attribute question_id value integer;\n  attribute up_votes value integer;\n  attribute score value integer;\n  attribute down_votes value integer;\n  attribute tag_name value string;\n  attribute image value string;\n  attribute user_link value string;\n  attribute user_id value integer;\n  attribute reputation value integer;\n  attribute display_name value string;\n  attribute answer_id value integer;\n\n  # Entities\n  entity question,\n    owns favorites,\n    owns answered,\n    owns text,\n    owns link,\n    owns created_at,\n    owns title,\n    owns question_id @key,\n    owns up_votes,\n    owns score,\n    owns down_votes,\n    plays tagged:tagged_question,\n    plays asked:asked_question;\n\n  entity tag,\n    owns tag_name @key,\n    plays tagged:tag;\n\n  entity user,\n    owns image,\n    owns user_link,\n    owns user_id @key,\n    owns reputation,\n    owns display_name,\n    plays asked:asker;\n\n  entity answer,\n    owns answer_id @key,\n    owns created_at;\n\n  # Relations\n  relation tagged,\n    relates tagged_question,\n    relates tag;\n\n  relation asked,\n    relates asker,\n    relates asked_question;"},{"domain":"companies","question":"What are the names of the first 3 organizations that have subsidiaries?","typeql":"match\n$o isa organization;\nsubsidiary_of (parent: $o, subsidiary: $s);\nlimit 3;\nfetch { \"name\": $o.name };","schema":"define\n  # Attributes\n  attribute name value string;\n  attribute person_id value string;\n  attribute summary value string;\n  attribute revenue value double;\n  attribute motto value string;\n  attribute nbr_employees value integer;\n  attribute is_dissolved value boolean;\n  attribute organization_id value string;\n  attribute is_public value boolean;\n  attribute industry_category_name value string;\n  attribute industry_category_id value string;\n  attribute city_id value string;\n  attribute city_summary value string;\n  attribute city_name value string;\n  attribute country_name value string;\n  attribute country_id value string;\n  attribute country_summary value string;\n  attribute article_id value string;\n  attribute sentiment value double;\n  attribute author value string;\n  attribute site_name value string;\n  attribute article_summary value string;\n  attribute date value datetime;\n  attribute title value string;\n  attribute text value string;\n  attribute embedding value string;\n  attribute embedding_google value string;\n  attribute question value string;\n  attribute cypher value string;\n  attribute fewshot_id value integer;\n  attribute population value integer;\n  attribute start-date value datetime;\n  attribute founding-date value datetime;\n  attribute patent-count value integer;\n\n  # Entities\n  entity person,\n    owns name,\n    owns person_id @key,\n    owns summary,\n    plays parent_of:parent,\n    plays parent_of:child,\n    plays ceo_of:ceo,\n    plays invested_in:investor,\n    plays board_member_of:member;\n\n  entity organization,\n    owns name,\n    owns organization_id @key,\n    owns summary,\n    owns revenue,\n    owns motto,\n    owns nbr_employees,\n    owns is_dissolved,\n    owns is_public,\n    owns founding-date,\n    owns patent-count,\n    plays located_in:organization,\n    plays ceo_of:organization,\n    plays in_category:organization,\n    plays subsidiary_of:parent,\n    plays subsidiary_of:subsidiary,\n    plays supplies:supplier,\n    plays supplies:customer,\n    plays invested_in:organization,\n    plays invested_in:investor,\n    plays board_member_of:organization,\n    plays competes_with:competitor,\n    plays mentions:mentioned;\n\n  entity industry_category,\n    owns industry_category_name,\n    owns industry_category_id @key,\n    plays in_category:category;\n\n  entity place,\n    owns population,\n    plays location-contains:parent,\n    plays location-contains:child;\n\n  entity city sub place,\n    owns city_id @key,\n    owns city_summary,\n    owns city_name,\n    plays located_in:city,\n    plays mentions:mentioned;\n\n  entity country sub place,\n    owns country_name,\n    owns country_id @key,\n    owns country_summary;\n\n  entity article,\n    owns article_id @key,\n    owns sentiment,\n    owns author,\n    owns site_name,\n    owns article_summary,\n    owns date,\n    owns title,\n    plays has_chunk:article,\n    plays mentions:article;\n\n  entity chunk,\n    owns text,\n    owns embedding,\n    owns embedding_google,\n    plays has_chunk:chunk;\n\n  entity fewshot,\n    owns question,\n    owns cypher,\n    owns fewshot_id @key,\n    owns embedding;\n\n  # Relations\n  relation parent_of,\n    relates parent,\n    relates child;\n\n  relation located_in,\n    relates organization,\n    relates city;\n\n  relation ceo_of,\n    relates organization,\n    relates ceo,\n    owns start-date;\n\n  relation in_category,\n    relates organization,\n    relates category;\n\n  relation subsidiary_of,\n    relates parent,\n    relates subsidiary;\n\n  relation supplies,\n    relates supplier,\n    relates customer;\n\n  relation invested_in,\n    relates organization,\n    relates investor;\n\n  relation board_member_of,\n    relates organization,\n    relates member,\n    owns start-date;\n\n  relation competes_with,\n    relates competitor;\n\n  relation location-contains,\n    relates parent,\n    relates child;\n\n  relation has_chunk,\n    relates article,\n    relates chunk;\n\n  relation mentions,\n    relates article,\n    relates mentioned;"},{"domain":"companies","question":"Who are the top 3 investors in the tech industry?","typeql":"match\n  $i isa person;\n  $o isa organization;\n  $c isa industry_category;\n  invested_in (investor: $i, organization: $o);\n  $c has industry_category_name $c_industry_category_name;\n  $c_industry_category_name contains \"Tech\";\n  in_category (organization: $o, category: $c);\nreduce $investments = count($o) groupby $i;\nsort $investments desc;\nlimit 3;\nfetch { \"investor\": $i.name, \"investments\": $investments };","schema":"define\n  # Attributes\n  attribute name value string;\n  attribute person_id value string;\n  attribute summary value string;\n  attribute revenue value double;\n  attribute motto value string;\n  attribute nbr_employees value integer;\n  attribute is_dissolved value boolean;\n  attribute organization_id value string;\n  attribute is_public value boolean;\n  attribute industry_category_name value string;\n  attribute industry_category_id value string;\n  attribute city_id value string;\n  attribute city_summary value string;\n  attribute city_name value string;\n  attribute country_name value string;\n  attribute country_id value string;\n  attribute country_summary value string;\n  attribute article_id value string;\n  attribute sentiment value double;\n  attribute author value string;\n  attribute site_name value string;\n  attribute article_summary value string;\n  attribute date value datetime;\n  attribute title value string;\n  attribute text value string;\n  attribute embedding value string;\n  attribute embedding_google value string;\n  attribute question value string;\n  attribute cypher value string;\n  attribute fewshot_id value integer;\n  attribute population value integer;\n  attribute start-date value datetime;\n  attribute founding-date value datetime;\n  attribute patent-count value integer;\n\n  # Entities\n  entity person,\n    owns name,\n    owns person_id @key,\n    owns summary,\n    plays parent_of:parent,\n    plays parent_of:child,\n    plays ceo_of:ceo,\n    plays invested_in:investor,\n    plays board_member_of:member;\n\n  entity organization,\n    owns name,\n    owns organization_id @key,\n    owns summary,\n    owns revenue,\n    owns motto,\n    owns nbr_employees,\n    owns is_dissolved,\n    owns is_public,\n    owns founding-date,\n    owns patent-count,\n    plays located_in:organization,\n    plays ceo_of:organization,\n    plays in_category:organization,\n    plays subsidiary_of:parent,\n    plays subsidiary_of:subsidiary,\n    plays supplies:supplier,\n    plays supplies:customer,\n    plays invested_in:organization,\n    plays invested_in:investor,\n    plays board_member_of:organization,\n    plays competes_with:competitor,\n    plays mentions:mentioned;\n\n  entity industry_category,\n    owns industry_category_name,\n    owns industry_category_id @key,\n    plays in_category:category;\n\n  entity place,\n    owns population,\n    plays location-contains:parent,\n    plays location-contains:child;\n\n  entity city sub place,\n    owns city_id @key,\n    owns city_summary,\n    owns city_name,\n    plays located_in:city,\n    plays mentions:mentioned;\n\n  entity country sub place,\n    owns country_name,\n    owns country_id @key,\n    owns country_summary;\n\n  entity article,\n    owns article_id @key,\n    owns sentiment,\n    owns author,\n    owns site_name,\n    owns article_summary,\n    owns date,\n    owns title,\n    plays has_chunk:article,\n    plays mentions:article;\n\n  entity chunk,\n    owns text,\n    owns embedding,\n    owns embedding_google,\n    plays has_chunk:chunk;\n\n  entity fewshot,\n    owns question,\n    owns cypher,\n    owns fewshot_id @key,\n    owns embedding;\n\n  # Relations\n  relation parent_of,\n    relates parent,\n    relates child;\n\n  relation located_in,\n    relates organization,\n    relates city;\n\n  relation ceo_of,\n    relates organization,\n    relates ceo,\n    owns start-date;\n\n  relation in_category,\n    relates organization,\n    relates category;\n\n  relation subsidiary_of,\n    relates parent,\n    relates subsidiary;\n\n  relation supplies,\n    relates supplier,\n    relates customer;\n\n  relation invested_in,\n    relates organization,\n    relates investor;\n\n  relation board_member_of,\n    relates organization,\n    relates member,\n    owns start-date;\n\n  relation competes_with,\n    relates competitor;\n\n  relation location-contains,\n    relates parent,\n    relates child;\n\n  relation has_chunk,\n    relates article,\n    relates chunk;\n\n  relation mentions,\n    relates article,\n    relates mentioned;"},{"domain":"fincen","question":"What are the top 5 filings with the shortest duration between begin and end dates?","typeql":"match\n$f isa filing, has period_begin $b, has period_end $e, has sar_id $sid;\nlet $diff = $e - $b;\nsort $diff asc;\nlimit 5;\nfetch { \"sar_id\": $sid, \"begin\": $b, \"end\": $e, \"duration\": $diff };","schema":"define\n  # Attributes\n  attribute name value string;\n  attribute code value string;\n  attribute tld value string;\n  attribute filing_id value string;\n  attribute entity_id value string;\n  attribute country_code value string;\n  attribute period_begin value datetime;\n  attribute period_end value datetime;\n  attribute originator_bank_id value string;\n  attribute sar_id value string;\n  attribute beneficiary_bank value string;\n  attribute filer_org_name_id value string;\n  attribute originator_bank_country value string;\n  attribute beneficiary_bank_country value string;\n  attribute filer_org_name value string;\n  attribute originator_iso value string;\n  attribute beneficiary_bank_id value string;\n  attribute origin_lat value string;\n  attribute origin_lng value string;\n  attribute end_date_format value string;\n  attribute begin_date_format value string;\n  attribute originator_bank value string;\n  attribute beneficiary_lat value string;\n  attribute beneficiary_iso value string;\n  attribute beneficiary_lng value string;\n  attribute begin_date value string;\n  attribute end_date value string;\n  attribute amount value integer;\n  attribute number value integer;\n\n  # Entities\n  entity country,\n    owns name,\n    owns code @key,\n    owns tld,\n    plays entity_country:country;\n\n  entity filing,\n    owns filing_id @key,\n    owns period_begin,\n    owns period_end,\n    owns originator_bank_id,\n    owns sar_id,\n    owns beneficiary_bank,\n    owns filer_org_name_id,\n    owns originator_bank_country,\n    owns beneficiary_bank_country,\n    owns filer_org_name,\n    owns originator_iso,\n    owns beneficiary_bank_id,\n    owns origin_lat,\n    owns origin_lng,\n    owns end_date_format,\n    owns begin_date_format,\n    owns originator_bank,\n    owns beneficiary_lat,\n    owns beneficiary_iso,\n    owns beneficiary_lng,\n    owns begin_date,\n    owns end_date,\n    owns amount,\n    owns number,\n    plays benefits:filing,\n    plays concerns:filing,\n    plays originator:filing,\n    plays filed:filing;\n\n  entity fincen_entity,\n    owns entity_id @key,\n    owns name,\n    owns country_code,\n    plays benefits:beneficiary,\n    plays concerns:concerned_entity,\n    plays originator:originating_entity,\n    plays filed:filer,\n    plays entity_country:fincen_entity;\n\n  # Relations\n  relation benefits,\n    relates filing,\n    relates beneficiary;\n\n  relation concerns,\n    relates filing,\n    relates concerned_entity;\n\n  relation originator,\n    relates filing,\n    relates originating_entity;\n\n  relation filed,\n    relates filer,\n    relates filing;\n\n  relation entity_country,\n    relates fincen_entity,\n    relates country;"},{"domain":"fincen","question":"What are the top 5 filings by amount in 2015?","typeql":"match\n$f isa filing, has period_begin $pb, has period_end $pe, has amount $a;\n$pb >= 2015-01-01T00:00:00;\n$pe <= 2015-12-31T23:59:59;\nsort $a desc;\nlimit 5;\nfetch {\n  \"filing_id\": $f.filing_id,\n  \"amount\": $a,\n  \"period_begin\": $pb,\n  \"period_end\": $pe\n};","schema":"define\n  # Attributes\n  attribute name value string;\n  attribute code value string;\n  attribute tld value string;\n  attribute filing_id value string;\n  attribute entity_id value string;\n  attribute country_code value string;\n  attribute period_begin value datetime;\n  attribute period_end value datetime;\n  attribute originator_bank_id value string;\n  attribute sar_id value string;\n  attribute beneficiary_bank value string;\n  attribute filer_org_name_id value string;\n  attribute originator_bank_country value string;\n  attribute beneficiary_bank_country value string;\n  attribute filer_org_name value string;\n  attribute originator_iso value string;\n  attribute beneficiary_bank_id value string;\n  attribute origin_lat value string;\n  attribute origin_lng value string;\n  attribute end_date_format value string;\n  attribute begin_date_format value string;\n  attribute originator_bank value string;\n  attribute beneficiary_lat value string;\n  attribute beneficiary_iso value string;\n  attribute beneficiary_lng value string;\n  attribute begin_date value string;\n  attribute end_date value string;\n  attribute amount value integer;\n  attribute number value integer;\n\n  # Entities\n  entity country,\n    owns name,\n    owns code @key,\n    owns tld,\n    plays entity_country:country;\n\n  entity filing,\n    owns filing_id @key,\n    owns period_begin,\n    owns period_end,\n    owns originator_bank_id,\n    owns sar_id,\n    owns beneficiary_bank,\n    owns filer_org_name_id,\n    owns originator_bank_country,\n    owns beneficiary_bank_country,\n    owns filer_org_name,\n    owns originator_iso,\n    owns beneficiary_bank_id,\n    owns origin_lat,\n    owns origin_lng,\n    owns end_date_format,\n    owns begin_date_format,\n    owns originator_bank,\n    owns beneficiary_lat,\n    owns beneficiary_iso,\n    owns beneficiary_lng,\n    owns begin_date,\n    owns end_date,\n    owns amount,\n    owns number,\n    plays benefits:filing,\n    plays concerns:filing,\n    plays originator:filing,\n    plays filed:filing;\n\n  entity fincen_entity,\n    owns entity_id @key,\n    owns name,\n    owns country_code,\n    plays benefits:beneficiary,\n    plays concerns:concerned_entity,\n    plays originator:originating_entity,\n    plays filed:filer,\n    plays entity_country:fincen_entity;\n\n  # Relations\n  relation benefits,\n    relates filing,\n    relates beneficiary;\n\n  relation concerns,\n    relates filing,\n    relates concerned_entity;\n\n  relation originator,\n    relates filing,\n    relates originating_entity;\n\n  relation filed,\n    relates filer,\n    relates filing;\n\n  relation entity_country,\n    relates fincen_entity,\n    relates country;"},{"domain":"gameofthrones","question":"Who are the top 3 characters with the lowest degree?","typeql":"match\n$c isa character, has name $name, has degree $d;\nsort $d asc;\nlimit 3;\nfetch {\n  \"name\": $name,\n  \"degree\": $d\n};","schema":"define\n  attribute centrality value double;\n  attribute book45_page_rank value double;\n  attribute fastrf_embedding value double;\n  attribute book1_betweenness_centrality value double;\n  attribute book1_page_rank value double;\n  attribute louvain value integer;\n  attribute community value integer;\n  attribute degree value double;\n  attribute name value string;\n  attribute pagerank value double;\n  attribute weight value integer;\n  attribute book value integer;\n\n  entity character,\n    owns centrality,\n    owns book45_page_rank,\n    owns fastrf_embedding,\n    owns book1_betweenness_centrality,\n    owns book1_page_rank,\n    owns louvain,\n    owns community,\n    owns degree,\n    owns name @key,\n    owns pagerank,\n    plays interacts45:character1,\n    plays interacts45:character2,\n    plays interacts:character1,\n    plays interacts:character2,\n    plays interacts1:character1,\n    plays interacts1:character2,\n    plays interacts3:character1,\n    plays interacts3:character2,\n    plays interacts2:character1,\n    plays interacts2:character2;\n\n  relation interacts45,\n    relates character1,\n    relates character2,\n    owns weight,\n    owns book;\n\n  relation interacts,\n    relates character1,\n    relates character2,\n    owns weight;\n\n  relation interacts1,\n    relates character1,\n    relates character2,\n    owns weight,\n    owns book;\n\n  relation interacts3,\n    relates character1,\n    relates character2,\n    owns weight,\n    owns book;\n\n  relation interacts2,\n    relates character1,\n    relates character2,\n    owns weight,\n    owns book;"},{"domain":"gameofthrones","question":"Who are the characters with a louvain value less than 1?","typeql":"match\n  $c isa character;\n  $c has louvain $c_louvain;\n  $c_louvain < 1;\nfetch { \"c_name\": $c.name };","schema":"define\n  attribute centrality value double;\n  attribute book45_page_rank value double;\n  attribute fastrf_embedding value double;\n  attribute book1_betweenness_centrality value double;\n  attribute book1_page_rank value double;\n  attribute louvain value integer;\n  attribute community value integer;\n  attribute degree value double;\n  attribute name value string;\n  attribute pagerank value double;\n  attribute weight value integer;\n  attribute book value integer;\n\n  entity character,\n    owns centrality,\n    owns book45_page_rank,\n    owns fastrf_embedding,\n    owns book1_betweenness_centrality,\n    owns book1_page_rank,\n    owns louvain,\n    owns community,\n    owns degree,\n    owns name @key,\n    owns pagerank,\n    plays interacts45:character1,\n    plays interacts45:character2,\n    plays interacts:character1,\n    plays interacts:character2,\n    plays interacts1:character1,\n    plays interacts1:character2,\n    plays interacts3:character1,\n    plays interacts3:character2,\n    plays interacts2:character1,\n    plays interacts2:character2;\n\n  relation interacts45,\n    relates character1,\n    relates character2,\n    owns weight,\n    owns book;\n\n  relation interacts,\n    relates character1,\n    relates character2,\n    owns weight;\n\n  relation interacts1,\n    relates character1,\n    relates character2,\n    owns weight,\n    owns book;\n\n  relation interacts3,\n    relates character1,\n    relates character2,\n    owns weight,\n    owns book;\n\n  relation interacts2,\n    relates character1,\n    relates character2,\n    owns weight,\n    owns book;"},{"domain":"grandstack","question":"What are the businesses reviewed on '2018-09-10' and who wrote the reviews?","typeql":"match\n  $u isa user;\n  $r isa review, has date $d;\n  $d == 2018-09-10T00:00:00;\n  $b isa business;\n  wrote (author: $u, review: $r);\n  reviews (review: $r, reviewed_business: $b);\nfetch {\n  \"business_name\": $b.name,\n  \"user_name\": $u.name\n};","schema":"define\n  attribute address value string;\n  attribute location value string;\n  attribute city value string;\n  attribute state value string;\n  attribute business_id value string;\n  attribute name value string;\n  attribute user_id value string;\n  attribute date value datetime;\n  attribute text value string;\n  attribute stars value double;\n  attribute review_id value string;\n\n  entity business,\n    owns address,\n    owns location,\n    owns city,\n    owns state,\n    owns business_id @key,\n    owns name,\n    plays in_category:business,\n    plays reviews:reviewed_business;\n\n  entity user,\n    owns name,\n    owns user_id @key,\n    plays wrote:author;\n\n  entity review,\n    owns date,\n    owns text,\n    owns stars,\n    owns review_id @key,\n    plays wrote:review,\n    plays reviews:review;\n\n  entity category,\n    owns name @key,\n    plays in_category:category;\n\n  relation in_category,\n    relates business,\n    relates category;\n\n  relation wrote,\n    relates author,\n    relates review;\n\n  relation reviews,\n    relates review,\n    relates reviewed_business;"},{"domain":"grandstack","question":"What are the addresses of businesses with reviews mentioning 'selection of books'?","typeql":"match\n$b isa business;\n$r isa review, has text $t;\n$t like \".*selection of books.*\";\nreviews (reviewed_business: $b, review: $r);\nfetch {\n  \"address\": $b.address\n};","schema":"define\n  attribute address value string;\n  attribute location value string;\n  attribute city value string;\n  attribute state value string;\n  attribute business_id value string;\n  attribute name value string;\n  attribute user_id value string;\n  attribute date value datetime;\n  attribute text value string;\n  attribute stars value double;\n  attribute review_id value string;\n\n  entity business,\n    owns address,\n    owns location,\n    owns city,\n    owns state,\n    owns business_id @key,\n    owns name,\n    plays in_category:business,\n    plays reviews:reviewed_business;\n\n  entity user,\n    owns name,\n    owns user_id @key,\n    plays wrote:author;\n\n  entity review,\n    owns date,\n    owns text,\n    owns stars,\n    owns review_id @key,\n    plays wrote:review,\n    plays reviews:review;\n\n  entity category,\n    owns name @key,\n    plays in_category:category;\n\n  relation in_category,\n    relates business,\n    relates category;\n\n  relation wrote,\n    relates author,\n    relates review;\n\n  relation reviews,\n    relates review,\n    relates reviewed_business;"},{"domain":"movies","question":"What are the first 3 movies that received a review with a rating less than 50?","typeql":"match\n  $m isa movie;\n  $p isa person;\n  $r isa reviewed (reviewer: $p, film: $m), has rating $ratingr;\n  $ratingr < 50;\n  $m has title $titlem;\nlimit 3;\nfetch {\n  \"title\": $titlem\n};","schema":"define\n  attribute name value string;\n  attribute born value integer;\n  attribute title value string;\n  attribute votes value integer;\n  attribute tagline value string;\n  attribute released value integer;\n  attribute roles value string;\n  attribute summary value string;\n  attribute rating value integer;\n\n  entity person,\n    owns name @key,\n    owns born,\n    plays acted_in:actor,\n    plays directed:director,\n    plays produced:producer,\n    plays wrote:writer,\n    plays follows:follower,\n    plays follows:followed,\n    plays reviewed:reviewer;\n\n  entity movie,\n    owns title @key,\n    owns votes,\n    owns tagline,\n    owns released,\n    plays acted_in:film,\n    plays directed:film,\n    plays produced:film,\n    plays wrote:film,\n    plays reviewed:film;\n\n  relation acted_in,\n    relates actor,\n    relates film,\n    owns roles;\n\n  relation directed,\n    relates director,\n    relates film;\n\n  relation produced,\n    relates producer,\n    relates film;\n\n  relation wrote,\n    relates writer,\n    relates film;\n\n  relation follows,\n    relates follower,\n    relates followed;\n\n  relation reviewed,\n    relates reviewer,\n    relates film,\n    owns summary,\n    owns rating;"},{"domain":"movies","question":"What are the roles of Keanu Reeves in movies he reviewed with a rating above 90?","typeql":"match\n  $p isa person, has name \"Keanu Reeves\";\n  $m isa movie, has title $title;\n  $rev isa reviewed (reviewer: $p, film: $m), has rating $rating;\n  $rating > 90;\n  $act isa acted_in (actor: $p, film: $m), has roles $roles;\nfetch {\n  \"movie\": $title,\n  \"roles\": $roles\n};","schema":"define\n  attribute name value string;\n  attribute born value integer;\n  attribute title value string;\n  attribute votes value integer;\n  attribute tagline value string;\n  attribute released value integer;\n  attribute roles value string;\n  attribute summary value string;\n  attribute rating value integer;\n\n  entity person,\n    owns name @key,\n    owns born,\n    plays acted_in:actor,\n    plays directed:director,\n    plays produced:producer,\n    plays wrote:writer,\n    plays follows:follower,\n    plays follows:followed,\n    plays reviewed:reviewer;\n\n  entity movie,\n    owns title @key,\n    owns votes,\n    owns tagline,\n    owns released,\n    plays acted_in:film,\n    plays directed:film,\n    plays produced:film,\n    plays wrote:film,\n    plays reviewed:film;\n\n  relation acted_in,\n    relates actor,\n    relates film,\n    owns roles;\n\n  relation directed,\n    relates director,\n    relates film;\n\n  relation produced,\n    relates producer,\n    relates film;\n\n  relation wrote,\n    relates writer,\n    relates film;\n\n  relation follows,\n    relates follower,\n    relates followed;\n\n  relation reviewed,\n    relates reviewer,\n    relates film,\n    owns summary,\n    owns rating;"},{"domain":"neoflix","question":"Who are the first 3 actors cast in the movie 'Toy Story'?","typeql":"match\n$m isa movie, has title \"Toy Story\";\n$rel isa cast_for (actor: $p, film: $m);\n$rel has cast_id $cid;\n$p isa person;\nsort $cid asc;\nlimit 3;\nfetch {\n  \"actor_name\": $p.person_name\n};","schema":"define\n  # Attributes\n  attribute average_vote value double;\n  attribute overview value string;\n  attribute revenue value double;\n  attribute vote_count value integer;\n  attribute tagline value string;\n  attribute budget value integer;\n  attribute title value string;\n  attribute poster_path value string;\n  attribute imdb_id value string;\n  attribute status value string;\n  attribute runtime value double;\n  attribute popularity value double;\n  attribute homepage value string;\n  attribute release_date value datetime;\n  attribute movie_id value integer;\n  attribute original_title value string;\n  attribute language_id value string;\n  attribute language_name value string;\n  attribute country_id value string;\n  attribute country_name value string;\n  attribute genre_id value integer;\n  attribute genre_name value string;\n  attribute production_company_id value integer;\n  attribute production_company_name value string;\n  attribute collection_name value string;\n  attribute collection_id value integer;\n  attribute backdrop_path value string;\n  attribute gender value integer;\n  attribute profile_path value string;\n  attribute person_id value integer;\n  attribute person_name value string;\n  attribute user_id value string;\n  attribute keyword_id value integer;\n  attribute keyword_name value string;\n  attribute package_price value double;\n  attribute package_duration value string;\n  attribute package_id value integer;\n  attribute package_name value string;\n  attribute expires_at value datetime;\n  attribute subscription_id value string;\n  attribute credit_id value string;\n  attribute cast_order value integer;\n  attribute character value string;\n  attribute cast_id value integer;\n  attribute job value string;\n  attribute department value string;\n  attribute timestamp value datetime;\n  attribute rating value double;\n\n  # Entities - Media type hierarchy\n  entity media,\n    owns average_vote,\n    owns overview,\n    owns revenue,\n    owns vote_count,\n    owns tagline,\n    owns budget,\n    owns title,\n    owns poster_path,\n    owns imdb_id,\n    owns status,\n    owns runtime,\n    owns popularity,\n    owns homepage,\n    owns release_date,\n    owns movie_id @key,\n    owns original_title,\n    plays original_language:media,\n    plays spoken_in_language:media,\n    plays produced_in_country:media,\n    plays in_genre:media,\n    plays produced_by:media,\n    plays has_keyword:media,\n    plays in_collection:media,\n    plays cast_for:film,\n    plays crew_for:film,\n    plays rated:rated_media;\n\n  entity movie sub media,\n    owns backdrop_path;\n\n  entity video sub media;\n\n  entity adult_video sub video;\n\n  # Entities - Other\n  entity language,\n    owns language_id @key,\n    owns language_name,\n    plays original_language:language,\n    plays spoken_in_language:language;\n\n  entity country,\n    owns country_id @key,\n    owns country_name,\n    plays produced_in_country:country,\n    plays born_in:country;\n\n  entity genre,\n    owns genre_id @key,\n    owns genre_name,\n    plays in_genre:genre,\n    plays provides_access_to:genre;\n\n  entity production_company,\n    owns production_company_id @key,\n    owns production_company_name,\n    plays produced_by:producer;\n\n  entity collection,\n    owns collection_name,\n    owns collection_id @key,\n    owns backdrop_path,\n    owns poster_path,\n    plays in_collection:collection,\n    plays in_genre:media;\n\n  entity person,\n    owns gender,\n    owns profile_path,\n    owns person_id @key,\n    owns person_name,\n    plays cast_for:actor,\n    plays crew_for:crew_member,\n    plays born_in:person;\n\n  entity user,\n    owns user_id @key,\n    plays rated:reviewer;\n\n  entity keyword,\n    owns keyword_id @key,\n    owns keyword_name,\n    plays has_keyword:keyword;\n\n  entity package,\n    owns package_price,\n    owns package_duration,\n    owns package_id @key,\n    owns package_name,\n    plays provides_access_to:package,\n    plays for_package:package;\n\n  entity subscription,\n    owns expires_at,\n    owns subscription_id @key,\n    plays for_package:subscription;\n\n  # Relations\n  relation original_language,\n    relates media,\n    relates language;\n\n  relation spoken_in_language,\n    relates media,\n    relates language;\n\n  relation produced_in_country,\n    relates media,\n    relates country;\n\n  relation in_genre,\n    relates media,\n    relates genre;\n\n  relation produced_by,\n    relates media,\n    relates producer;\n\n  relation has_keyword,\n    relates media,\n    relates keyword;\n\n  relation in_collection,\n    relates media,\n    relates collection;\n\n  relation cast_for,\n    relates actor,\n    relates film,\n    owns credit_id,\n    owns cast_order,\n    owns character,\n    owns cast_id;\n\n  relation crew_for,\n    relates crew_member,\n    relates film,\n    owns credit_id,\n    owns job,\n    owns department;\n\n  relation rated,\n    relates reviewer,\n    relates rated_media,\n    owns timestamp,\n    owns rating;\n\n  relation provides_access_to,\n    relates package,\n    relates genre;\n\n  relation for_package,\n    relates subscription,\n    relates package;\n\n  relation born_in,\n    relates person,\n    relates country;"},{"domain":"neoflix","question":"What are the first 3 genres that have the most movies?","typeql":"match\n$m isa movie;\nin_genre (media: $m, genre: $g);\n$g has genre_name $gn;\nreduce $count = count($m) groupby $g;\nsort $count desc;\nlimit 3;\nfetch { \"genre\": $g.genre_name, \"movie_count\": $count };","schema":"define\n  attribute average_vote value double;\n  attribute title value string;\n  attribute movie_id value integer;\n  attribute genre_id value integer;\n  attribute genre_name value string;\n\n  entity media,\n    owns title,\n    owns movie_id @key,\n    plays in_genre:media;\n\n  entity movie sub media;\n\n  entity genre,\n    owns genre_id @key,\n    owns genre_name,\n    plays in_genre:genre;\n\n  relation in_genre,\n    relates media,\n    relates genre;"},{"domain":"network","question":"Which racks contain switches with IP starting with '10.1'?","typeql":"match\n$rack isa rack;\n$switch isa switch, has ip $ip;\n$ip like \"10.1.*\";\nholds (containing_rack: $rack, held_equipment: $switch);\nfetch {\n  \"rack_name\": $rack.name\n};","schema":"define\n  # Attributes\n  attribute name value string;\n  attribute location value string;\n  attribute ip value string;\n  attribute zone value integer;\n  attribute size value integer;\n  attribute rack_number value integer;\n  attribute type_id value integer;\n  attribute machine_type value string;\n  attribute ram value integer;\n  attribute disk value integer;\n  attribute cpu value integer;\n  attribute start_time value integer;\n  attribute pid value integer;\n  attribute port_number value integer;\n\n  # Entities\n  entity data_center,\n    owns name @key,\n    owns location,\n    plays dc_contains:data_center;\n\n  entity router,\n    owns name @key,\n    owns zone,\n    plays dc_contains:contained_equipment,\n    plays routes:routing_device;\n\n  entity rack,\n    owns name @key,\n    owns zone,\n    owns rack_number,\n    plays dc_contains:contained_equipment,\n    plays holds:containing_rack;\n\n  entity switch,\n    owns ip @key,\n    owns rack_number,\n    plays holds:held_equipment,\n    plays routes:routing_device;\n\n  entity machine,\n    owns name @key,\n    plays holds:held_equipment,\n    plays runs:host_machine;\n\n  # Relations\n  relation dc_contains,\n    relates data_center,\n    relates contained_equipment;\n\n  relation holds,\n    relates containing_rack,\n    relates held_equipment;\n\n  relation runs,\n    relates host_machine,\n    relates running_process;"},{"domain":"network","question":"Which processes are instances of the version named 7.1?","typeql":"match\n$v isa version, has name \"7.1\";\n$p isa process, has name $pn, has start_time $st, has pid $pid;\ninstance_of (running_instance: $p, template: $v);\nfetch {\n  \"process_name\": $pn,\n  \"start_time\": $st,\n  \"pid\": $pid\n};","schema":"define\n  attribute name value string;\n  attribute start_time value integer;\n  attribute pid value integer;\n\n  entity version,\n    owns name,\n    plays instance_of:template;\n\n  entity process,\n    owns name,\n    owns start_time,\n    owns pid,\n    plays instance_of:running_instance;\n\n  relation instance_of,\n    relates running_instance,\n    relates template;"},{"domain":"northwind","question":"Which 3 products have the lowest reorder level?","typeql":"match\n$p isa product, has reorder_level $rl;\nsort $rl asc;\nlimit 3;\nfetch {\n  \"product_name\": $p.product_name,\n  \"reorder_level\": $rl\n};","schema":"define\n  attribute product_name value string;\n  attribute product_id value string;\n  attribute reorder_level value integer;\n  attribute units_in_stock value integer;\n  attribute unit_price value double;\n  attribute category_name value string;\n  attribute category_id value string;\n  attribute company_name value string;\n  attribute supplier_id value string;\n  attribute customer_id value string;\n  attribute order_id value string;\n  attribute order_date value string;\n  attribute quantity value integer;\n  attribute discount value double;\n\n  entity product,\n    owns product_name,\n    owns product_id @key,\n    owns reorder_level,\n    owns units_in_stock,\n    owns unit_price,\n    plays part_of:product,\n    plays supplies:product,\n    plays orders:product;\n\n  entity category,\n    owns category_id @key,\n    owns category_name,\n    plays part_of:category;\n\n  entity supplier,\n    owns company_name,\n    owns supplier_id @key,\n    plays supplies:supplier;\n\n  entity customer,\n    owns company_name,\n    owns customer_id @key,\n    plays purchased:customer;\n\n  entity order,\n    owns order_id @key,\n    owns order_date,\n    plays purchased:order,\n    plays orders:order;\n\n  relation part_of,\n    relates product,\n    relates category;\n\n  relation supplies,\n    relates supplier,\n    relates product;\n\n  relation purchased,\n    relates customer,\n    relates order;\n\n  relation orders,\n    relates order,\n    relates product,\n    owns quantity,\n    owns discount;"},{"domain":"northwind","question":"Which 3 suppliers provide products in the 'Dairy Products' category?","typeql":"match\n$c isa category, has category_name \"Dairy Products\";\npart_of (product: $p, category: $c);\nsupplies (supplier: $s, product: $p);\nlimit 3;\nfetch { \"company_name\": $s.company_name };","schema":"define\n  attribute product_name value string;\n  attribute product_id value string;\n  attribute category_name value string;\n  attribute category_id value string;\n  attribute company_name value string;\n  attribute supplier_id value string;\n\n  entity product,\n    owns product_name,\n    owns product_id @key,\n    plays part_of:product,\n    plays supplies:product;\n\n  entity category,\n    owns category_id @key,\n    owns category_name,\n    plays part_of:category;\n\n  entity supplier,\n    owns company_name,\n    owns supplier_id @key,\n    plays supplies:supplier;\n\n  relation part_of,\n    relates product,\n    relates category;\n\n  relation supplies,\n    relates supplier,\n    relates product;"},{"domain":"offshoreleaks","question":"Which entities have an address in 'KOWLOON; HONG KONG'?","typeql":"match\n$e isa offshore_entity;\n$a isa postal_address, has address $addr;\n$addr like \".*KOWLOON; HONG KONG.*\";\nregistered_address (registrant: $e, registered_addr: $a);\nfetch {\n  \"entity_name\": $e.name,\n  \"entity_address\": $e.address\n};","schema":"define\n  attribute name value string;\n  attribute node_id value integer;\n  attribute address value string;\n  attribute status value string;\n  attribute source_id value string;\n  attribute valid_until value string;\n  attribute link value string;\n\n  entity offshore_entity,\n    owns name,\n    owns node_id @key,\n    owns address,\n    owns status,\n    plays registered_address:registrant;\n\n  entity postal_address,\n    owns name,\n    owns node_id @key,\n    owns address,\n    owns source_id,\n    owns valid_until,\n    plays registered_address:registered_addr;\n\n  relation registered_address,\n    relates registrant,\n    relates registered_addr,\n    owns link,\n    owns source_id,\n    owns valid_until;"},{"domain":"offshoreleaks","question":"Which intermediaries have 'ACTIVE' as their status?","typeql":"match\n$i isa intermediary, has status \"ACTIVE\";\nfetch {\n  \"intermediary_name\": $i.name,\n  \"intermediary_id\": $i.node_id\n};","schema":"define\n  attribute name value string;\n  attribute node_id value integer;\n  attribute status value string;\n\n  entity intermediary,\n    owns name,\n    owns node_id @key,\n    owns status;"},{"domain":"recommendations","question":"What movies have both English and French as their languages?","typeql":"match\n$m isa movie, has languages $l, has title $t;\n$l like \".*English.*\";\n$l like \".*French.*\";\nfetch {\n  \"movie_title\": $m.title,\n  \"Languages\": $m.languages\n};","schema":"define\n  attribute title value string;\n  attribute languages value string;\n  attribute movie_id value string;\n  attribute imdb_rating value double;\n  attribute name value string;\n  attribute user_id value string;\n  attribute rating value double;\n  attribute timestamp value integer;\n\n  entity movie,\n    owns title,\n    owns languages,\n    owns movie_id @key,\n    owns imdb_rating,\n    plays in_genre:film,\n    plays rated:film;\n\n  entity genre,\n    owns name @key,\n    plays in_genre:genre;\n\n  entity user,\n    owns user_id @key,\n    owns name,\n    plays rated:user;\n\n  relation in_genre,\n    relates film,\n    relates genre;\n\n  relation rated,\n    relates user,\n    relates film,\n    owns rating,\n    owns timestamp;"},{"domain":"recommendations","question":"What are the top 3 movies with the highest budget that also have revenue data?","typeql":"match $m isa movie, has title $t, has budget $b, has revenue $r; sort $b desc; limit 3; fetch { \"title\": $t, \"budget\": $b, \"revenue\": $r };","schema":"define\n  attribute title value string;\n  attribute budget value integer;\n  attribute revenue value integer;\n  attribute movie_id value string;\n\n  entity movie,\n    owns title,\n    owns budget,\n    owns revenue,\n    owns movie_id @key;"},{"domain":"stackoverflow2","question":"Which 3 questions have the highest answer count?","typeql":"match\n$q isa question, has answer_count $ac;\nsort $ac desc;\nlimit 3;\nfetch {\n  \"title\": $q.title,\n  \"link\": $q.question_link,\n  \"answer_count\": $ac\n};","schema":"define\n  attribute question_uuid value integer;\n  attribute question_link value string;\n  attribute answer_count value integer;\n  attribute title value string;\n  attribute user_uuid value integer;\n  attribute display_name value string;\n  attribute name value string;\n  attribute tag_link value string;\n\n  entity question,\n    owns question_uuid @key,\n    owns question_link,\n    owns answer_count,\n    owns title,\n    plays tagged:question,\n    plays asked:question;\n\n  entity user,\n    owns user_uuid @key,\n    owns display_name,\n    plays asked:asker;\n\n  entity tag,\n    owns name @key,\n    owns tag_link,\n    plays tagged:tag;\n\n  relation tagged,\n    relates question,\n    relates tag;\n\n  relation asked,\n    relates asker,\n    relates question;"},{"domain":"stackoverflow2","question":"What are the first 5 questions with the most unique tags?","typeql":"match\n$q isa question;\ntagged (question: $q, tag: $t);\nreduce $tag_count = count($t) groupby $q;\nsort $tag_count desc;\nlimit 5;\nfetch {\n  \"question_title\": $q.title,\n  \"tag_count\": $tag_count\n};","schema":"define\n  attribute question_uuid value integer;\n  attribute title value string;\n  attribute name value string;\n\n  entity question,\n    owns question_uuid @key,\n    owns title,\n    plays tagged:question;\n\n  entity tag,\n    owns name @key,\n    plays tagged:tag;\n\n  relation tagged,\n    relates question,\n    relates tag;"},{"domain":"twitch","question":"Can you list streams that have a follower count between 1000 and 5000?","typeql":"match\n  $s isa stream, has name $sn, has followers $f;\n  $f >= 1000;\n  $f <= 5000;\nfetch { \"stream_name\": $sn, \"followers\": $f };","schema":"define\n  attribute name value string;\n  attribute followers value integer;\n  attribute stream_id value string;\n  attribute total_view_count value integer;\n\n  entity stream,\n    owns name @key,\n    owns stream_id,\n    owns followers,\n    owns total_view_count,\n    plays game_play:streaming_channel;\n\n  entity game,\n    owns name @key,\n    plays game_play:played_game;\n\n  relation game_play,\n    relates streaming_channel,\n    relates played_game;"},{"domain":"twitch","question":"Who are the top 3 chatters in the stream named 'summit1g'?","typeql":"match\n$s isa stream, has name \"summit1g\";\n$u isa user, has name $n;\n$rel isa chat_activity (channel_with_chatters: $s, chatting_user: $u);\nreduce $chat_count = count($rel) groupby $u, $n;\nsort $chat_count desc;\nlimit 3;\nfetch { \"name\": $n, \"chat_count\": $chat_count };","schema":"define\n  attribute name value string;\n  attribute followers value integer;\n\n  entity stream,\n    owns name @key,\n    owns followers,\n    plays chat_activity:channel_with_chatters;\n\n  entity user,\n    owns name @key,\n    plays chat_activity:chatting_user;\n\n  relation chat_activity,\n    relates chatting_channel,\n    relates channel_with_chatters,\n    relates chatting_user,\n    relates user_with_chatters;"},{"domain":"twitter","question":"Which sources are used in the top 5 most favorited tweets?","typeql":"match\n$t isa tweet, has favorites $f;\nusing (tweet_content: $t, platform: $s);\n$s isa source;\nsort $f desc;\nlimit 5;\nfetch {\n  \"source_name\": $s.source_name,\n  \"favorites\": $f\n};","schema":"define\n  attribute screen_name value string;\n  attribute tweet_id value integer;\n  attribute text value string;\n  attribute favorites value integer;\n  attribute source_name value string;\n\n  entity user,\n    owns screen_name @key,\n    plays posts:author;\n\n  entity tweet,\n    owns tweet_id @key,\n    owns text,\n    owns favorites,\n    plays posts:content,\n    plays using:tweet_content;\n\n  entity source,\n    owns source_name @key,\n    plays using:platform;\n\n  relation posts,\n    relates author,\n    relates content;\n\n  relation using,\n    relates tweet_content,\n    relates platform;"},{"domain":"twitter","question":"Which tweets by 'neo4j' have been retweeted and also contain a link?","typeql":"match\n$u isa user, has screen_name \"neo4j\";\nposts (author: $u, content: $t);\ncontains (containing_tweet: $t, contained_link: $l);\nretweets (original_tweet: $t, retweeting_tweet: $rt);\nfetch {\n  \"tweet_id\": $t.id_str,\n  \"tweet_text\": $t.text,\n  \"link_url\": $l.link_url\n};","schema":"define\n  attribute screen_name value string;\n  attribute tweet_id value integer;\n  attribute id_str value string;\n  attribute text value string;\n  attribute link_url value string;\n\n  entity user,\n    owns screen_name @key,\n    plays posts:author;\n\n  entity tweet,\n    owns tweet_id @key,\n    owns id_str,\n    owns text,\n    plays posts:content,\n    plays contains:containing_tweet,\n    plays retweets:original_tweet,\n    plays retweets:retweeting_tweet;\n\n  entity link,\n    owns link_url @key,\n    plays contains:contained_link;\n\n  relation posts,\n    relates author,\n    relates content;\n\n  relation contains,\n    relates containing_tweet,\n    relates contained_link;\n\n  relation retweets,\n    relates original_tweet,\n    relates retweeting_tweet;"}];
+
+  // ─── Domain config ─────────────────────────────────────────────────────────
+  const DOMAIN_CONFIG = {
+    all:             { label: 'All',             emoji: '✦',  color: '#7c6af7' },
+    bluesky:         { label: 'Bluesky',         emoji: '🦋', color: '#6ac8f7' },
+    buzzoverflow:    { label: 'BuzzOverflow',    emoji: '🐝', color: '#f7c46a' },
+    companies:       { label: 'Companies',       emoji: '🏢', color: '#a78bfa' },
+    fincen:          { label: 'FinCEN',          emoji: '💰', color: '#6af798' },
+    gameofthrones:   { label: 'Game of Thrones', emoji: '⚔️', color: '#f76a7c' },
+    grandstack:      { label: 'GrandStack',      emoji: '📍', color: '#fb923c' },
+    movies:          { label: 'Movies',          emoji: '🎬', color: '#6adef7' },
+    neoflix:         { label: 'Neoflix',         emoji: '🎞️', color: '#c084fc' },
+    network:         { label: 'Network',         emoji: '🌐', color: '#34d399' },
+    northwind:       { label: 'Northwind',       emoji: '🛒', color: '#fbbf24' },
+    offshoreleaks:   { label: 'Offshore Leaks',  emoji: '🔍', color: '#f97316' },
+    recommendations: { label: 'Recommendations', emoji: '⭐', color: '#facc15' },
+    stackoverflow2:  { label: 'Stack Overflow',  emoji: '📚', color: '#ef4444' },
+    twitch:          { label: 'Twitch',          emoji: '🎮', color: '#a855f7' },
+    twitter:         { label: 'Twitter',         emoji: '🐦', color: '#60a5fa' },
+  };
+
+  // ─── API URL ────────────────────────────────────────────────────────────────
   const API_URL =
     window.TYPEQL_API_URL ||
     document.querySelector('meta[name="typeql-api-url"]')?.content ||
     'https://typeql-agent.p6r.workers.dev';
 
-  // ─── TypeQL syntax highlighter ────────────────────────────────────────────
-  const KW_QUERY    = new Set(['match','fetch','reduce','insert','delete','update','get','not','or','try','sort','limit','offset','groupby','select','put']);
-  const KW_DEFINE   = new Set(['define','undefine','redefine']);
-  const KW_STRUCT   = new Set(['sub','isa','has','owns','relates','plays','as','abstract','value','fun','return','with','let','is']);
-  const KW_TYPE     = new Set(['entity','relation','attribute']);
-  const KW_AGG      = new Set(['count','sum','mean','max','min','distinct','std']);
-  const KW_BOOL     = new Set(['true','false','none']);
+  // ─── TypeQL syntax highlighter ─────────────────────────────────────────────
+  const KW_QUERY  = new Set(['match','fetch','reduce','insert','delete','update','get','not','or','try','sort','limit','offset','groupby','select','put']);
+  const KW_DEFINE = new Set(['define','undefine','redefine']);
+  const KW_STRUCT = new Set(['sub','isa','has','owns','relates','plays','as','abstract','value','fun','return','with','let','is','like','contains','distinct']);
+  const KW_TYPE   = new Set(['entity','relation','attribute']);
+  const KW_AGG    = new Set(['count','sum','mean','max','min','distinct','std']);
+  const KW_BOOL   = new Set(['true','false','none']);
 
-  /**
-   * Minimal TypeQL tokeniser → HTML.
-   * Processes the text character-by-character to avoid regex cross-contamination.
-   */
   function highlightTypeQL(src) {
     let out = '';
     let i = 0;
@@ -549,12 +795,7 @@
 
     function peek(offset = 0) { return src[i + offset] ?? ''; }
     function eat() { return src[i++]; }
-
-    function span(cls, text) {
-      return `<span class="${cls}">${escHtml(text)}</span>`;
-    }
-
-    // Read while predicate holds
+    function span(cls, text) { return `<span class="${cls}">${escHtml(text)}</span>`; }
     function readWhile(pred) {
       let s = '';
       while (i < n && pred(src[i])) s += src[i++];
@@ -564,14 +805,12 @@
     while (i < n) {
       const ch = src[i];
 
-      // Comment: # to end-of-line
       if (ch === '#') {
         const comment = readWhile(c => c !== '\n');
         out += span('kw-comment', comment);
         continue;
       }
 
-      // String literal: "..." or '...'
       if (ch === '"' || ch === "'") {
         const q = eat();
         let s = q;
@@ -584,7 +823,6 @@
         continue;
       }
 
-      // Variable: $identifier
       if (ch === '$') {
         eat();
         const name = readWhile(c => /[\w\-]/.test(c));
@@ -592,21 +830,15 @@
         continue;
       }
 
-      // Number literal
       if (/[0-9]/.test(ch) || (ch === '-' && /[0-9]/.test(peek(1)))) {
         const num = (ch === '-' ? eat() : '') + readWhile(c => /[0-9._]/.test(c));
         out += span('kw-num', num);
         continue;
       }
 
-      // Identifier / keyword
       if (/[a-zA-Z_]/.test(ch)) {
         const word = readWhile(c => /[\w\-]/.test(c));
-        if (KW_DEFINE.has(word)) {
-          out += span('kw-keyword', word);
-        } else if (KW_QUERY.has(word)) {
-          out += span('kw-keyword', word);
-        } else if (KW_STRUCT.has(word)) {
+        if (KW_DEFINE.has(word) || KW_QUERY.has(word) || KW_STRUCT.has(word)) {
           out += span('kw-keyword', word);
         } else if (KW_TYPE.has(word)) {
           out += span('kw-type', word);
@@ -620,16 +852,13 @@
         continue;
       }
 
-      // Punctuation (colons, semicolons, braces, parens, comma)
       if (/[;:,{}\[\]()]/.test(ch)) {
         out += span('kw-punct', eat());
         continue;
       }
 
-      // Everything else: output as-is (whitespace, operators, etc.)
       out += escHtml(eat());
     }
-
     return out;
   }
 
@@ -641,36 +870,151 @@
       .replace(/"/g, '&quot;');
   }
 
-  // ─── DOM refs ─────────────────────────────────────────────────────────────
-  const promptEl     = document.getElementById('prompt');
-  const generateBtn  = document.getElementById('generate-btn');
-  const btnLabel     = document.getElementById('btn-label');
-  const spinnerEl    = document.getElementById('spinner');
-  const errorBanner  = document.getElementById('error-banner');
-  const errorText    = document.getElementById('error-text');
-  const errorClose   = document.getElementById('error-close');
+  // ─── DOM refs ───────────────────────────────────────────────────────────────
+  const promptEl         = document.getElementById('prompt');
+  const generateBtn      = document.getElementById('generate-btn');
+  const btnLabel         = document.getElementById('btn-label');
+  const spinnerEl        = document.getElementById('spinner');
+  const errorBanner      = document.getElementById('error-banner');
+  const errorText        = document.getElementById('error-text');
+  const errorClose       = document.getElementById('error-close');
+  const schemaOut        = document.getElementById('schema-output');
+  const queriesOut       = document.getElementById('queries-output');
+  const explainOut       = document.getElementById('explain-output');
+  const skelSchema       = document.getElementById('skel-schema');
+  const skelQueries      = document.getElementById('skel-queries');
+  const skelExplain      = document.getElementById('skel-explain');
+  const copySchema       = document.getElementById('copy-schema');
+  const copyQueries      = document.getElementById('copy-queries');
+  const copyExplain      = document.getElementById('copy-explain');
+  const queryTabsEl      = document.getElementById('query-tabs');
+  const tabGenerated     = document.getElementById('tab-generated');
+  const tabTraining      = document.getElementById('tab-training');
+  const trainingBadge    = document.getElementById('training-badge');
+  const domainFilterBar  = document.getElementById('domain-filter-bar');
+  const sampleCardsEl    = document.getElementById('sample-cards');
+  const shuffleBtn       = document.getElementById('shuffle-btn');
+  const panelsContainer  = document.getElementById('panels-container');
 
-  const schemaOut    = document.getElementById('schema-output');
-  const queriesOut   = document.getElementById('queries-output');
-  const explainOut   = document.getElementById('explain-output');
+  // ─── State ──────────────────────────────────────────────────────────────────
+  let currentSample   = null;   // selected training sample or null
+  let generatedData   = null;   // { schema, queries, explanation }
+  let viewMode        = 'generated'; // 'generated' | 'training'
+  let activeDomain    = 'all';
+  let activeSampleIdx = null;   // index in SAMPLES of selected card
+  let displayedSamples = [];    // current cards shown
 
-  const skelSchema   = document.getElementById('skel-schema');
-  const skelQueries  = document.getElementById('skel-queries');
-  const skelExplain  = document.getElementById('skel-explain');
-
-  const copySchema   = document.getElementById('copy-schema');
-  const copyQueries  = document.getElementById('copy-queries');
-  const copyExplain  = document.getElementById('copy-explain');
-
-  // Clipboard text store (raw, un-highlighted)
+  // Raw text for copy
   let rawSchema  = '';
-  let rawQueries = [];  // string[]
+  let rawQueries = [];
   let rawExplain = '';
 
-  // ─── Skeleton helpers ─────────────────────────────────────────────────────
+  // ─── Sample Picker ──────────────────────────────────────────────────────────
+
+  function buildDomainPills() {
+    const domains = ['all', ...Object.keys(DOMAIN_CONFIG).filter(k => k !== 'all')];
+    domainFilterBar.innerHTML = '';
+    for (const domain of domains) {
+      const cfg = DOMAIN_CONFIG[domain];
+      const btn = document.createElement('button');
+      btn.className = 'domain-pill' + (domain === activeDomain ? ' active' : '');
+      btn.dataset.domain = domain;
+      btn.textContent = `${cfg.emoji} ${cfg.label}`;
+      btn.addEventListener('click', () => selectDomain(domain));
+      domainFilterBar.appendChild(btn);
+    }
+  }
+
+  function selectDomain(domain) {
+    activeDomain = domain;
+    // update pills
+    domainFilterBar.querySelectorAll('.domain-pill').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.domain === domain);
+    });
+    renderSampleCards(true);
+  }
+
+  function getSamplesForDomain(domain) {
+    if (domain === 'all') return SAMPLES;
+    return SAMPLES.filter(s => s.domain === domain);
+  }
+
+  function pickDisplayed(domain) {
+    const pool = getSamplesForDomain(domain);
+    if (domain === 'all') {
+      // pick 6 from different domains if possible
+      const shuffled = shuffle([...pool]);
+      return shuffled.slice(0, 6);
+    }
+    return pool.slice(0, 3);
+  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function renderSampleCards(forceReshuffle = false) {
+    if (forceReshuffle || displayedSamples.length === 0) {
+      displayedSamples = pickDisplayed(activeDomain);
+    }
+    sampleCardsEl.innerHTML = '';
+    displayedSamples.forEach((sample, idx) => {
+      const cfg = DOMAIN_CONFIG[sample.domain] || DOMAIN_CONFIG['all'];
+      const card = document.createElement('div');
+      card.className = 'sample-card';
+      card.style.setProperty('--card-accent', cfg.color);
+      // mark selected
+      if (currentSample && currentSample === sample) {
+        card.classList.add('selected');
+      }
+      card.innerHTML = `
+        <div class="card-domain-tag">${cfg.emoji} ${cfg.label}</div>
+        <div class="card-question">${escHtml(sample.question)}</div>
+      `;
+      card.addEventListener('click', () => onCardClick(sample, card));
+      sampleCardsEl.appendChild(card);
+    });
+  }
+
+  function onCardClick(sample, cardEl) {
+    // deselect all cards
+    sampleCardsEl.querySelectorAll('.sample-card').forEach(c => c.classList.remove('selected'));
+    cardEl.classList.add('selected');
+
+    currentSample = sample;
+    promptEl.value = sample.question;
+
+    // If we switch to a new sample after having generated, reset to generated mode
+    // and hide the training tab (will re-enable after next generate)
+    if (generatedData) {
+      setViewMode('generated');
+      queryTabsEl.classList.remove('visible');
+      tabTraining.disabled = true;
+    }
+
+    promptEl.focus();
+  }
+
+  shuffleBtn.addEventListener('click', () => {
+    displayedSamples = pickDisplayed(activeDomain);
+    renderSampleCards();
+    // If we reshuffled and had a selected card that's no longer shown, don't auto-deselect
+    // the textarea but remove visual highlight
+    sampleCardsEl.querySelectorAll('.sample-card').forEach(c => {
+      // re-check if this card matches currentSample
+      // (cards are recreated so no old refs)
+    });
+  });
+
+  // ─── Skeleton helpers ───────────────────────────────────────────────────────
   function showSkeletons() {
     [skelSchema, skelQueries, skelExplain].forEach(el => el.classList.add('visible'));
     [schemaOut, queriesOut, explainOut].forEach(el => el.style.display = 'none');
+    trainingBadge.classList.remove('visible');
   }
 
   function hideSkeletons() {
@@ -678,7 +1022,7 @@
     [schemaOut, queriesOut, explainOut].forEach(el => el.style.display = '');
   }
 
-  // ─── Error banner ─────────────────────────────────────────────────────────
+  // ─── Error banner ───────────────────────────────────────────────────────────
   function showError(msg) {
     errorText.textContent = msg;
     errorBanner.classList.add('visible');
@@ -688,35 +1032,33 @@
   }
   errorClose.addEventListener('click', hideError);
 
-  // ─── Copy to clipboard ────────────────────────────────────────────────────
+  // ─── Copy to clipboard ──────────────────────────────────────────────────────
   function setupCopy(btn, getText) {
     btn.addEventListener('click', async () => {
       const text = getText();
       if (!text) return;
+      const origHTML = btn.innerHTML;
       try {
         await navigator.clipboard.writeText(text);
-        btn.classList.add('copied');
-        const prev = btn.innerHTML;
-        btn.innerHTML = `
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-          Copied!`;
-        setTimeout(() => {
-          btn.classList.remove('copied');
-          btn.innerHTML = prev;
-        }, 2000);
       } catch {
-        // Fallback: execCommand
         const ta = document.createElement('textarea');
         ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
+        ta.style.cssText = 'position:fixed;opacity:0';
         document.body.appendChild(ta);
         ta.select();
         document.execCommand('copy');
         document.body.removeChild(ta);
       }
+      btn.classList.add('copied');
+      btn.innerHTML = `
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Copied!`;
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = origHTML;
+      }, 2000);
     });
   }
 
@@ -724,11 +1066,12 @@
   setupCopy(copyQueries, () => rawQueries.join('\n\n'));
   setupCopy(copyExplain, () => rawExplain);
 
-  // ─── Render helpers ───────────────────────────────────────────────────────
+  // ─── Render helpers ─────────────────────────────────────────────────────────
   function renderSchema(schema) {
     if (!schema || !schema.trim()) {
       schemaOut.innerHTML = '<div class="placeholder">No schema generated</div>';
       copySchema.disabled = true;
+      rawSchema = '';
       return;
     }
     rawSchema = schema;
@@ -740,6 +1083,7 @@
     if (!queries || queries.length === 0) {
       queriesOut.innerHTML = '<div class="placeholder">No queries generated</div>';
       copyQueries.disabled = true;
+      rawQueries = [];
       return;
     }
     rawQueries = queries;
@@ -756,16 +1100,56 @@
     if (!text || !text.trim()) {
       explainOut.innerHTML = '<div class="placeholder">No explanation</div>';
       copyExplain.disabled = true;
+      rawExplain = '';
       return;
     }
     rawExplain = text;
-    // Simple paragraph splitting
     const paras = text.split(/\n{2,}/).map(p => p.trim()).filter(Boolean);
     explainOut.innerHTML = `<div class="prose">${paras.map(p => `<p style="margin-bottom:0.85em">${escHtml(p)}</p>`).join('')}</div>`;
     copyExplain.disabled = false;
   }
 
-  // ─── Loading state ────────────────────────────────────────────────────────
+  // ─── View mode (Generated / Training) ──────────────────────────────────────
+  function setViewMode(mode) {
+    viewMode = mode;
+    tabGenerated.classList.toggle('tab-active', mode === 'generated');
+    tabTraining.classList.toggle('tab-active', mode === 'training');
+    tabGenerated.setAttribute('aria-selected', mode === 'generated');
+    tabTraining.setAttribute('aria-selected', mode === 'training');
+
+    if (mode === 'training' && currentSample) {
+      trainingBadge.classList.add('visible');
+      renderSchema(currentSample.schema);
+      renderQueries([currentSample.typeql]);
+      // Explanation panel shows training note
+      explainOut.innerHTML = `<div class="prose">
+        <p style="color:var(--green);font-weight:600;margin-bottom:0.6em">
+          ✓ Ground truth from training set
+        </p>
+        <p style="color:var(--text-muted);font-size:0.85em">
+          This is the reference TypeQL query used to train the model for this example.
+          Compare it against the <em>Generated</em> tab to see how closely the model reproduced the intended answer.
+        </p>
+      </div>`;
+      copyExplain.disabled = true;
+      rawExplain = '';
+    } else if (mode === 'generated' && generatedData) {
+      trainingBadge.classList.remove('visible');
+      renderSchema(generatedData.schema ?? '');
+      renderQueries(generatedData.queries ?? []);
+      renderExplain(generatedData.explanation ?? '');
+    }
+  }
+
+  tabGenerated.addEventListener('click', () => {
+    if (viewMode !== 'generated') setViewMode('generated');
+  });
+
+  tabTraining.addEventListener('click', () => {
+    if (!tabTraining.disabled && viewMode !== 'training') setViewMode('training');
+  });
+
+  // ─── Loading state ──────────────────────────────────────────────────────────
   function setLoading(isLoading) {
     generateBtn.disabled = isLoading;
     promptEl.disabled    = isLoading;
@@ -778,19 +1162,27 @@
     }
   }
 
-  // ─── Main generate ────────────────────────────────────────────────────────
+  // ─── Main generate ──────────────────────────────────────────────────────────
   async function generate() {
     const prompt = promptEl.value.trim();
-    if (!prompt) {
-      promptEl.focus();
-      return;
+    if (!prompt) { promptEl.focus(); return; }
+
+    // Check if the prompt still matches the selected sample (user may have edited it)
+    if (currentSample && prompt !== currentSample.question) {
+      // User typed a custom prompt — detach from sample
+      currentSample = null;
+      sampleCardsEl.querySelectorAll('.sample-card').forEach(c => c.classList.remove('selected'));
     }
 
     hideError();
     setLoading(true);
     showSkeletons();
+    queryTabsEl.classList.remove('visible');
+    tabTraining.disabled = true;
+    viewMode = 'generated';
+    tabGenerated.classList.add('tab-active');
+    tabTraining.classList.remove('tab-active');
 
-    // Reset copy buttons
     [copySchema, copyQueries, copyExplain].forEach(b => b.disabled = true);
 
     try {
@@ -808,17 +1200,31 @@
           : (data.error || `Server error (HTTP ${res.status})`);
         showError(msg);
         hideSkeletons();
-        // Show empty placeholders
         renderSchema('');
         renderQueries([]);
         renderExplain('');
         return;
       }
 
+      generatedData = {
+        schema:      data.schema      ?? '',
+        queries:     data.queries     ?? [],
+        explanation: data.explanation ?? '',
+      };
+
       hideSkeletons();
-      renderSchema(data.schema  ?? '');
-      renderQueries(data.queries ?? []);
-      renderExplain(data.explanation ?? '');
+      renderSchema(generatedData.schema);
+      renderQueries(generatedData.queries);
+      renderExplain(generatedData.explanation);
+
+      // Show toggle if a training sample is active
+      if (currentSample) {
+        queryTabsEl.classList.add('visible');
+        tabTraining.disabled = false;
+      }
+
+      // Auto-scroll to results
+      panelsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     } catch (err) {
       hideSkeletons();
@@ -834,16 +1240,20 @@
     }
   }
 
-  // ─── Event wiring ─────────────────────────────────────────────────────────
+  // ─── Event wiring ───────────────────────────────────────────────────────────
   generateBtn.addEventListener('click', generate);
 
-  // Enter in textarea should NOT submit; Shift+Enter adds newline (default).
-  // Plain Enter: do nothing special (no submit), just let the browser handle newline.
-  promptEl.addEventListener('keydown', e => {
-    // no submit on Enter — button only
+  // Clear sample selection when user manually edits the textarea
+  promptEl.addEventListener('input', () => {
+    if (currentSample && promptEl.value !== currentSample.question) {
+      currentSample = null;
+      sampleCardsEl.querySelectorAll('.sample-card').forEach(c => c.classList.remove('selected'));
+    }
   });
 
-  // Auto-focus on load
+  // ─── Init picker ────────────────────────────────────────────────────────────
+  buildDomainPills();
+  renderSampleCards(true);
   promptEl.focus();
 </script>
 </body>
