@@ -1,0 +1,32 @@
+# Secrets
+.env
+.env.*
+
+# Cloudflare local cache
+.wrangler/
+.dev.vars
+
+# Node
+node_modules/
+worker/node_modules/
+worker/bun.lock
+
+# Beads / context (project management internals)
+.bv/
+.beads/
+.context/
+.task-transcripts.local/
+.references/
+
+# Training data (large files — regenerate via scripts)
+finetune/data/train.jsonl
+finetune/data/train_slim.jsonl
+finetune/data/train_slim_subset.jsonl
+finetune/data/val.jsonl
+finetune/data/val_slim.jsonl
+finetune/data/test.jsonl
+finetune/data/test_slim.jsonl
+finetune/data/.build-manifest
+
+# OS
+.DS_Store
