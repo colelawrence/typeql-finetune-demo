@@ -46,6 +46,7 @@ module.exports = {
     'declaration-property-unit-disallowed-list': {
       'font-size': ['px', 'pt'],
       'border-radius': ['px', 'rem', 'em'],
+      'letter-spacing': ['px'],
     },
 
     // ════════════════════════════════════════════
@@ -78,12 +79,10 @@ module.exports = {
   },
   overrides: [
     {
-      // Token definition file — raw values are allowed here (it defines the tokens)
-      files: ['ui/styles.css'],
+      // Token definition file — raw values are allowed here (it defines the tokens).
+      // ONLY tokens.css is exempted. styles.css is fully enforced.
+      files: ['ui/tokens.css'],
       rules: {
-        // The :root block defines primitives with oklch() — allow it
-        // We can't scope to just :root, so we exempt the whole file and
-        // rely on the private token ban (--_*) to catch misuse elsewhere
         'color-no-hex': null,
         'function-disallowed-list': null,
         'scale-unlimited/declaration-strict-value': null,

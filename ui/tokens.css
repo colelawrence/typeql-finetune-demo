@@ -1,0 +1,154 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Design Tokens — the ONLY file where raw color/size values are allowed.
+   Everything below :root is in styles.css and must use var(--*) only.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Reset ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* ── Hue palette ── */
+  --_hue-base: 283;    /* navy-violet — surfaces, text, accent all share this hue */
+  --_hue-green: 152;
+  --_hue-red: 15;
+  --_hue-yellow: 80;
+  --_hue-cyan: 214;
+  --_hue-pink: 346;
+  --_hue-orange: 56;
+
+  /* ── Primitive colors (private: --_ prefix) ── */
+  --_navy-950:   oklch(0.174 0.023 var(--_hue-base));
+  --_navy-900:   oklch(0.228 0.038 var(--_hue-base));
+  --_navy-850:   oklch(0.264 0.044 var(--_hue-base));
+  --_navy-800:   oklch(0.318 0.060 var(--_hue-base));
+  --_navy-600:   oklch(0.383 0.044 var(--_hue-base));
+  --_navy-400:   oklch(0.591 0.049 var(--_hue-base));
+  --_snow-100:   oklch(0.917 0.019 var(--_hue-base));
+  --_violet-500: oklch(0.615 0.203 var(--_hue-base));
+  --_violet-600: oklch(0.519 0.199 var(--_hue-base));
+  --_violet-400: oklch(0.709 0.159 293);  /* syntax keyword — slightly shifted hue */
+  --_green-400:  oklch(0.876 0.180 var(--_hue-green));
+  --_red-400:    oklch(0.702 0.173 var(--_hue-red));
+  --_red-300:    oklch(0.795 0.104 12);   /* error banner text */
+  --_yellow-400: oklch(0.848 0.123 var(--_hue-yellow));
+  --_cyan-400:   oklch(0.843 0.110 var(--_hue-cyan));
+  --_pink-300:   oklch(0.823 0.110 var(--_hue-pink));
+  --_orange-400: oklch(0.758 0.159 var(--_hue-orange));
+  --_white:      oklch(1.000 0 0);
+
+  /* ── Semantic colors ── */
+  --color-bg:           var(--_navy-950);
+  --color-surface:      var(--_navy-900);
+  --color-surface-alt:  var(--_navy-850);
+  --color-border:       var(--_navy-800);
+  --color-accent:       var(--_violet-500);
+  --color-accent-hover: var(--_violet-600);
+  --color-text:         var(--_snow-100);
+  --color-text-muted:   var(--_navy-400);
+  --color-text-faint:   var(--_navy-600);
+  --color-success:      var(--_green-400);
+  --color-error:        var(--_red-400);
+  --color-error-text:   var(--_red-300);
+  --color-warning:      var(--_yellow-400);
+  --color-info:         var(--_cyan-400);
+  --color-white:        var(--_white);
+
+  /* ── Alpha variants (oklch alpha channel) ── */
+  --color-accent-a3:    oklch(0.615 0.203 var(--_hue-base) / 0.03);
+  --color-accent-a6:    oklch(0.615 0.203 var(--_hue-base) / 0.06);
+  --color-accent-a8:    oklch(0.615 0.203 var(--_hue-base) / 0.08);
+  --color-accent-a10:   oklch(0.615 0.203 var(--_hue-base) / 0.10);
+  --color-accent-a15:   oklch(0.615 0.203 var(--_hue-base) / 0.15);
+  --color-success-a8:   oklch(0.876 0.180 var(--_hue-green) / 0.08);
+  --color-success-a10:  oklch(0.876 0.180 var(--_hue-green) / 0.10);
+  --color-success-a25:  oklch(0.876 0.180 var(--_hue-green) / 0.25);
+  --color-success-a30:  oklch(0.876 0.180 var(--_hue-green) / 0.30);
+  --color-error-a12:    oklch(0.702 0.173 var(--_hue-red) / 0.12);
+  --color-error-a40:    oklch(0.702 0.173 var(--_hue-red) / 0.40);
+  --color-info-a15:     oklch(0.843 0.110 var(--_hue-cyan) / 0.15);
+  --color-info-a20:     oklch(0.843 0.110 var(--_hue-cyan) / 0.20);
+  --color-info-a30:     oklch(0.843 0.110 var(--_hue-cyan) / 0.30);
+  --color-info-a35:     oklch(0.843 0.110 var(--_hue-cyan) / 0.35);
+  --color-black-a30:    oklch(0 0 0 / 0.30);
+  --color-black-a50:    oklch(0 0 0 / 0.50);
+  --color-white-a30:    oklch(1 0 0 / 0.30);
+
+  /* ── Spacing scale (base: 4px) ── */
+  --space-0:    0;
+  --space-px:   1px;
+  --space-0p5:  2px;
+  --space-1:    4px;
+  --space-1p5:  6px;
+  --space-2:    8px;
+  --space-2p5:  10px;
+  --space-3:    12px;
+  --space-3p5:  14px;
+  --space-4:    16px;
+  --space-5:    20px;
+  --space-6:    24px;
+  --space-7:    28px;
+  --space-8:    32px;
+  --space-10:   40px;
+  --space-12:   48px;
+
+  /* ── Typography ── */
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --font-size-root: 15px;    /* rem anchor — all --text-* derive from this */
+
+  --text-2xs:   0.65rem;     /* 9.75px — badge labels */
+  --text-xs:    0.7rem;      /* 10.5px — small labels, query-num */
+  --text-sm:    0.75rem;     /* 11.25px — tabs, pills, copy buttons */
+  --text-base:  0.82rem;     /* 12.3px — code, panel content */
+  --text-md:    0.875rem;    /* 13.1px — body text, hints, explanations */
+  --text-lg:    0.95rem;     /* 14.25px — textarea, generate button */
+  --text-xl:    1.1rem;      /* 16.5px — close button, icon-sized text */
+  --text-2xl:   1.4rem;      /* 21px — responsive heading */
+  --text-3xl:   1.75rem;     /* 26.25px — h1 */
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semi:   600;
+  --font-weight-bold:   700;
+
+  --leading-snug:    1.4;
+  --leading-tight:   1.45;
+  --leading-normal:  1.6;
+  --leading-code:    1.65;
+  --leading-loose:   1.7;
+
+  /* ── Letter spacing ── */
+  --tracking-tight:  -0.02em;  /* headings */
+  --tracking-normal:  0.04em;  /* tabs, buttons */
+  --tracking-wide:    0.06em;  /* labels, badges */
+  --tracking-wider:   0.07em;  /* panel titles */
+  --tracking-widest:  0.08em;  /* uppercase tags */
+
+  /* ── Radii ── */
+  --radius-xs:   4px;
+  --radius-sm:   5px;
+  --radius-md:   6px;
+  --radius-lg:   8px;
+  --radius-xl:   12px;
+  --radius-full: 999px;
+
+  /* ── Decorative sizes (non-spacing structural values) ── */
+  --size-dot:      7px;       /* panel header dot indicators */
+  --size-stripe:   3px;       /* card left accent stripe width */
+  --size-skeleton: 12px;      /* skeleton loading bar height */
+  --size-spinner:  16px;      /* loading spinner dimensions */
+
+  /* ── Shadows ── */
+  --shadow-md: 0 var(--space-1) var(--space-6) var(--color-black-a50);
+
+  /* ── Syntax highlighting ── */
+  --syntax-keyword: var(--_violet-400);
+  --syntax-type:    var(--color-info);
+  --syntax-agg:     var(--color-warning);
+  --syntax-punct:   var(--color-text-muted);
+  --syntax-string:  var(--color-success);
+  --syntax-comment: var(--color-text-faint);
+  --syntax-var:     var(--_pink-300);
+  --syntax-num:     var(--_orange-400);
+}
