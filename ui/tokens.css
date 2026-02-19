@@ -8,7 +8,7 @@
 
 :root {
   /* ── Hue palette ── */
-  --_hue-base: 283;    /* navy-violet — surfaces, text, accent all share this hue */
+  --_hue-base: 283;
   --_hue-green: 152;
   --_hue-red: 15;
   --_hue-yellow: 80;
@@ -16,7 +16,11 @@
   --_hue-pink: 346;
   --_hue-orange: 56;
 
-  /* ── Primitive colors (private: --_ prefix) ── */
+  /* ══════════════════════════════════════════════
+     DARK THEME (default)
+     ══════════════════════════════════════════════ */
+
+  /* ── Primitive colors (private) ── */
   --_navy-950:   oklch(0.174 0.023 var(--_hue-base));
   --_navy-900:   oklch(0.228 0.038 var(--_hue-base));
   --_navy-850:   oklch(0.264 0.044 var(--_hue-base));
@@ -26,15 +30,6 @@
   --_snow-100:   oklch(0.917 0.019 var(--_hue-base));
   --_violet-500: oklch(0.615 0.203 var(--_hue-base));
   --_violet-600: oklch(0.519 0.199 var(--_hue-base));
-  --_violet-400: oklch(0.709 0.159 293);  /* syntax keyword — slightly shifted hue */
-  --_green-400:  oklch(0.876 0.180 var(--_hue-green));
-  --_red-400:    oklch(0.702 0.173 var(--_hue-red));
-  --_red-300:    oklch(0.795 0.104 12);   /* error banner text */
-  --_yellow-400: oklch(0.848 0.123 var(--_hue-yellow));
-  --_cyan-400:   oklch(0.843 0.110 var(--_hue-cyan));
-  --_pink-300:   oklch(0.823 0.110 var(--_hue-pink));
-  --_orange-400: oklch(0.758 0.159 var(--_hue-orange));
-  --_white:      oklch(1.000 0 0);
 
   /* ── Semantic colors ── */
   --color-bg:           var(--_navy-950);
@@ -46,32 +41,49 @@
   --color-text:         var(--_snow-100);
   --color-text-muted:   var(--_navy-400);
   --color-text-faint:   var(--_navy-600);
-  --color-success:      var(--_green-400);
-  --color-error:        var(--_red-400);
-  --color-error-text:   var(--_red-300);
-  --color-warning:      var(--_yellow-400);
-  --color-info:         var(--_cyan-400);
-  --color-white:        var(--_white);
+  --color-success:      oklch(0.876 0.180 var(--_hue-green));
+  --color-error:        oklch(0.702 0.173 var(--_hue-red));
+  --color-error-text:   oklch(0.795 0.104 12);
+  --color-warning:      oklch(0.848 0.123 var(--_hue-yellow));
+  --color-info:         oklch(0.843 0.110 var(--_hue-cyan));
+  --color-white:        oklch(1.000 0 0);
 
-  /* ── Alpha variants (oklch alpha channel) ── */
-  --color-accent-a3:    oklch(0.615 0.203 var(--_hue-base) / 0.03);
-  --color-accent-a6:    oklch(0.615 0.203 var(--_hue-base) / 0.06);
-  --color-accent-a8:    oklch(0.615 0.203 var(--_hue-base) / 0.08);
-  --color-accent-a10:   oklch(0.615 0.203 var(--_hue-base) / 0.10);
-  --color-accent-a15:   oklch(0.615 0.203 var(--_hue-base) / 0.15);
-  --color-success-a8:   oklch(0.876 0.180 var(--_hue-green) / 0.08);
-  --color-success-a10:  oklch(0.876 0.180 var(--_hue-green) / 0.10);
-  --color-success-a25:  oklch(0.876 0.180 var(--_hue-green) / 0.25);
-  --color-success-a30:  oklch(0.876 0.180 var(--_hue-green) / 0.30);
-  --color-error-a12:    oklch(0.702 0.173 var(--_hue-red) / 0.12);
-  --color-error-a40:    oklch(0.702 0.173 var(--_hue-red) / 0.40);
-  --color-info-a15:     oklch(0.843 0.110 var(--_hue-cyan) / 0.15);
-  --color-info-a20:     oklch(0.843 0.110 var(--_hue-cyan) / 0.20);
-  --color-info-a30:     oklch(0.843 0.110 var(--_hue-cyan) / 0.30);
-  --color-info-a35:     oklch(0.843 0.110 var(--_hue-cyan) / 0.35);
+  /* ── Alpha variants (color-mix — auto-adapts to theme) ── */
+  --color-accent-a3:    color-mix(in oklch, var(--color-accent) 3%, transparent);
+  --color-accent-a6:    color-mix(in oklch, var(--color-accent) 6%, transparent);
+  --color-accent-a8:    color-mix(in oklch, var(--color-accent) 8%, transparent);
+  --color-accent-a10:   color-mix(in oklch, var(--color-accent) 10%, transparent);
+  --color-accent-a15:   color-mix(in oklch, var(--color-accent) 15%, transparent);
+  --color-success-a8:   color-mix(in oklch, var(--color-success) 8%, transparent);
+  --color-success-a10:  color-mix(in oklch, var(--color-success) 10%, transparent);
+  --color-success-a25:  color-mix(in oklch, var(--color-success) 25%, transparent);
+  --color-success-a30:  color-mix(in oklch, var(--color-success) 30%, transparent);
+  --color-error-a12:    color-mix(in oklch, var(--color-error) 12%, transparent);
+  --color-error-a40:    color-mix(in oklch, var(--color-error) 40%, transparent);
+  --color-info-a15:     color-mix(in oklch, var(--color-info) 15%, transparent);
+  --color-info-a20:     color-mix(in oklch, var(--color-info) 20%, transparent);
+  --color-info-a30:     color-mix(in oklch, var(--color-info) 30%, transparent);
+  --color-info-a35:     color-mix(in oklch, var(--color-info) 35%, transparent);
   --color-black-a30:    oklch(0 0 0 / 0.30);
   --color-black-a50:    oklch(0 0 0 / 0.50);
   --color-white-a30:    oklch(1 0 0 / 0.30);
+
+  /* ── Shadow ── */
+  --shadow-md: 0 4px 24px oklch(0 0 0 / 0.50);
+
+  /* ── Syntax highlighting ── */
+  --syntax-keyword: oklch(0.709 0.159 293);
+  --syntax-type:    var(--color-info);
+  --syntax-agg:     var(--color-warning);
+  --syntax-punct:   var(--color-text-muted);
+  --syntax-string:  var(--color-success);
+  --syntax-comment: var(--color-text-faint);
+  --syntax-var:     oklch(0.823 0.110 var(--_hue-pink));
+  --syntax-num:     oklch(0.758 0.159 var(--_hue-orange));
+
+  /* ══════════════════════════════════════════════
+     SCALE TOKENS (shared across themes)
+     ══════════════════════════════════════════════ */
 
   /* ── Spacing scale (base: 4px) ── */
   --space-0:    0;
@@ -95,17 +107,16 @@
   --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-  --font-size-root: 15px;    /* rem anchor — all --text-* derive from this */
-
-  --text-2xs:   0.65rem;     /* 9.75px — badge labels */
-  --text-xs:    0.7rem;      /* 10.5px — small labels, query-num */
-  --text-sm:    0.75rem;     /* 11.25px — tabs, pills, copy buttons */
-  --text-base:  0.82rem;     /* 12.3px — code, panel content */
-  --text-md:    0.875rem;    /* 13.1px — body text, hints, explanations */
-  --text-lg:    0.95rem;     /* 14.25px — textarea, generate button */
-  --text-xl:    1.1rem;      /* 16.5px — close button, icon-sized text */
-  --text-2xl:   1.4rem;      /* 21px — responsive heading */
-  --text-3xl:   1.75rem;     /* 26.25px — h1 */
+  --font-size-root: 15px;
+  --text-2xs:   0.65rem;
+  --text-xs:    0.7rem;
+  --text-sm:    0.75rem;
+  --text-base:  0.82rem;
+  --text-md:    0.875rem;
+  --text-lg:    0.95rem;
+  --text-xl:    1.1rem;
+  --text-2xl:   1.4rem;
+  --text-3xl:   1.75rem;
 
   --font-weight-normal: 400;
   --font-weight-medium: 500;
@@ -119,11 +130,11 @@
   --leading-loose:   1.7;
 
   /* ── Letter spacing ── */
-  --tracking-tight:  -0.02em;  /* headings */
-  --tracking-normal:  0.04em;  /* tabs, buttons */
-  --tracking-wide:    0.06em;  /* labels, badges */
-  --tracking-wider:   0.07em;  /* panel titles */
-  --tracking-widest:  0.08em;  /* uppercase tags */
+  --tracking-tight:  -0.02em;
+  --tracking-normal:  0.04em;
+  --tracking-wide:    0.06em;
+  --tracking-wider:   0.07em;
+  --tracking-widest:  0.08em;
 
   /* ── Radii ── */
   --radius-xs:   4px;
@@ -133,22 +144,64 @@
   --radius-xl:   12px;
   --radius-full: 999px;
 
-  /* ── Decorative sizes (non-spacing structural values) ── */
-  --size-dot:      7px;       /* panel header dot indicators */
-  --size-stripe:   3px;       /* card left accent stripe width */
-  --size-skeleton: 12px;      /* skeleton loading bar height */
-  --size-spinner:  16px;      /* loading spinner dimensions */
+  /* ── Decorative sizes ── */
+  --size-dot:      7px;
+  --size-stripe:   3px;
+  --size-skeleton: 12px;
+  --size-spinner:  16px;
+}
 
-  /* ── Shadows ── */
-  --shadow-md: 0 var(--space-1) var(--space-6) var(--color-black-a50);
+/* ══════════════════════════════════════════════
+   LIGHT THEME
+   Activated by:
+   - data-theme="light" (explicit user choice)
+   - prefers-color-scheme: light when no explicit choice
+   ══════════════════════════════════════════════ */
 
-  /* ── Syntax highlighting ── */
-  --syntax-keyword: var(--_violet-400);
-  --syntax-type:    var(--color-info);
-  --syntax-agg:     var(--color-warning);
-  --syntax-punct:   var(--color-text-muted);
-  --syntax-string:  var(--color-success);
-  --syntax-comment: var(--color-text-faint);
-  --syntax-var:     var(--_pink-300);
-  --syntax-num:     var(--_orange-400);
+:root[data-theme="light"] {
+  --color-bg:           oklch(0.985 0.005 var(--_hue-base));
+  --color-surface:      oklch(0.965 0.010 var(--_hue-base));
+  --color-surface-alt:  oklch(0.945 0.015 var(--_hue-base));
+  --color-border:       oklch(0.880 0.022 var(--_hue-base));
+  --color-accent:       oklch(0.485 0.230 var(--_hue-base));
+  --color-accent-hover: oklch(0.435 0.240 var(--_hue-base));
+  --color-text:         oklch(0.200 0.030 var(--_hue-base));
+  --color-text-muted:   oklch(0.440 0.040 var(--_hue-base));
+  --color-text-faint:   oklch(0.650 0.025 var(--_hue-base));
+  --color-success:      oklch(0.520 0.160 var(--_hue-green));
+  --color-error:        oklch(0.530 0.180 var(--_hue-red));
+  --color-error-text:   oklch(0.480 0.160 12);
+  --color-warning:      oklch(0.560 0.140 var(--_hue-yellow));
+  --color-info:         oklch(0.500 0.120 var(--_hue-cyan));
+
+  /* Boost alpha percentages — subtle tints need more opacity on white */
+  --color-accent-a3:    color-mix(in oklch, var(--color-accent) 5%, transparent);
+  --color-accent-a6:    color-mix(in oklch, var(--color-accent) 8%, transparent);
+  --color-accent-a8:    color-mix(in oklch, var(--color-accent) 12%, transparent);
+  --color-accent-a10:   color-mix(in oklch, var(--color-accent) 15%, transparent);
+  --color-accent-a15:   color-mix(in oklch, var(--color-accent) 20%, transparent);
+  --color-success-a8:   color-mix(in oklch, var(--color-success) 12%, transparent);
+  --color-success-a10:  color-mix(in oklch, var(--color-success) 15%, transparent);
+  --color-success-a25:  color-mix(in oklch, var(--color-success) 30%, transparent);
+  --color-success-a30:  color-mix(in oklch, var(--color-success) 35%, transparent);
+  --color-error-a12:    color-mix(in oklch, var(--color-error) 15%, transparent);
+  --color-error-a40:    color-mix(in oklch, var(--color-error) 45%, transparent);
+  --color-info-a15:     color-mix(in oklch, var(--color-info) 20%, transparent);
+  --color-info-a20:     color-mix(in oklch, var(--color-info) 25%, transparent);
+  --color-info-a30:     color-mix(in oklch, var(--color-info) 35%, transparent);
+  --color-info-a35:     color-mix(in oklch, var(--color-info) 40%, transparent);
+  --color-black-a30:    oklch(0 0 0 / 0.10);
+  --color-black-a50:    oklch(0 0 0 / 0.15);
+  --color-white-a30:    oklch(0 0 0 / 0.08);
+
+  /* Lighter shadow for light mode */
+  --shadow-md: 0 2px 16px oklch(0 0 0 / 0.10);
+
+  /* Darker syntax colors for light backgrounds */
+  --syntax-keyword: oklch(0.480 0.200 293);
+  --syntax-type:    oklch(0.420 0.120 var(--_hue-cyan));
+  --syntax-agg:     oklch(0.530 0.140 var(--_hue-yellow));
+  --syntax-string:  oklch(0.420 0.160 var(--_hue-green));
+  --syntax-var:     oklch(0.530 0.140 var(--_hue-pink));
+  --syntax-num:     oklch(0.530 0.160 var(--_hue-orange));
 }

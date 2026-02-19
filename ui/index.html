@@ -4,6 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TypeQL Agent</title>
+  <script>
+    // Prevent flash of wrong theme: resolve and apply before CSS loads
+    (function() {
+      var s = localStorage.getItem('theme');
+      var resolved = (s === 'light' || s === 'dark')
+        ? s
+        : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.dataset.theme = resolved;
+    })();
+  </script>
   <link rel="stylesheet" href="tokens.css">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -16,12 +26,17 @@
       <h1>TypeQL Agent</h1>
       <p>Generate TypeQL schemas and queries from natural language</p>
     </div>
-    <a class="header-link" href="https://typedb.com/docs/typeql/3.x/overview" target="_blank" rel="noopener">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-      </svg>
-      TypeQL 3.x Docs
-    </a>
+    <div class="header-actions">
+      <button class="btn-theme" id="btn-theme" type="button" title="Toggle theme">
+        <span id="theme-icon">🌙</span>
+      </button>
+      <a class="header-link" href="https://typedb.com/docs/typeql/3.x/overview" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        TypeQL 3.x Docs
+      </a>
+    </div>
   </header>
 
   <!-- ── Sample Picker ── -->
@@ -753,6 +768,43 @@
       setSchemaVisualState('none');
     }
   });
+
+  // ─── Theme toggle ─────────────────────────────────────────────────────────
+  const THEME_CYCLE = ['auto', 'light', 'dark'];
+  const THEME_ICONS = { auto: '◐', light: '☀️', dark: '🌙' };
+  const THEME_LABELS = { auto: 'System theme', light: 'Light theme', dark: 'Dark theme' };
+
+  function getSystemTheme() {
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+
+  function getStoredPreference() {
+    return localStorage.getItem('theme') || 'auto';
+  }
+
+  function applyTheme(pref) {
+    const resolved = pref === 'auto' ? getSystemTheme() : pref;
+    document.documentElement.dataset.theme = resolved;
+    const icon = document.getElementById('theme-icon');
+    const btn = document.getElementById('btn-theme');
+    if (icon) icon.textContent = THEME_ICONS[pref];
+    if (btn) btn.title = THEME_LABELS[pref];
+  }
+
+  document.getElementById('btn-theme').addEventListener('click', function() {
+    const current = getStoredPreference();
+    const next = THEME_CYCLE[(THEME_CYCLE.indexOf(current) + 1) % THEME_CYCLE.length];
+    localStorage.setItem('theme', next);
+    applyTheme(next);
+  });
+
+  // Listen for OS theme changes (only matters in auto mode)
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function() {
+    if (getStoredPreference() === 'auto') applyTheme('auto');
+  });
+
+  // Apply on load
+  applyTheme(getStoredPreference());
 
   // ─── Init picker ────────────────────────────────────────────────────────────
   buildDomainPills();
