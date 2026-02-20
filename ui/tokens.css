@@ -149,6 +149,9 @@
   --size-stripe:   3px;
   --size-skeleton: 12px;
   --size-spinner:  16px;
+
+  /* ── Shared OKLCH control knobs ── */
+  --text-highlight-lightness: 0.78;
 }
 
 /* ══════════════════════════════════════════════
@@ -204,4 +207,7 @@
   --syntax-string:  oklch(0.420 0.160 var(--_hue-green));
   --syntax-var:     oklch(0.530 0.140 var(--_hue-pink));
   --syntax-num:     oklch(0.530 0.160 var(--_hue-orange));
+
+  /* Keep highlight tones perceptually balanced on light backgrounds */
+  --text-highlight-lightness: 0.54;
 }

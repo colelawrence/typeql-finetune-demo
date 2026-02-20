@@ -30,7 +30,7 @@
       <button class="btn-theme" id="btn-theme" type="button" title="Toggle theme">
         <span id="theme-icon">🌙</span>
       </button>
-      <a class="header-link" href="https://typedb.com/docs/typeql/3.x/overview" target="_blank" rel="noopener">
+      <a class="header-link" href="https://typedb.com/docs/core-concepts/typeql/" target="_blank" rel="noopener">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
         </svg>
@@ -198,7 +198,7 @@
 
   <footer class="page-footer">
     Powered by <a href="https://typedb.com" target="_blank" rel="noopener">TypeDB</a> &amp;
-    <a href="https://typedb.com/docs/typeql/3.x/overview" target="_blank" rel="noopener">TypeQL 3.x</a>
+    <a href="https://typedb.com/docs/core-concepts/typeql/" target="_blank" rel="noopener">TypeQL 3.x</a>
   </footer>
 </div><!-- /.page -->
 
@@ -208,22 +208,22 @@
 
   // ─── Domain config ─────────────────────────────────────────────────────────
   const DOMAIN_CONFIG = {
-    all:             { label: 'All',             emoji: '✦',  color: 'oklch(0.615 0.203 284)' },
-    bluesky:         { label: 'Bluesky',         emoji: '🦋', color: 'oklch(0.793 0.111 232)' },
-    buzzoverflow:    { label: 'BuzzOverflow',    emoji: '🐝', color: 'oklch(0.848 0.123 80)' },
-    companies:       { label: 'Companies',       emoji: '🏢', color: 'oklch(0.709 0.159 294)' },
-    fincen:          { label: 'FinCEN',          emoji: '💰', color: 'oklch(0.876 0.180 152)' },
-    gameofthrones:   { label: 'Game of Thrones', emoji: '⚔️', color: 'oklch(0.702 0.173 15)' },
-    grandstack:      { label: 'GrandStack',      emoji: '📍', color: 'oklch(0.758 0.159 56)' },
-    movies:          { label: 'Movies',          emoji: '🎬', color: 'oklch(0.843 0.110 214)' },
-    neoflix:         { label: 'Neoflix',         emoji: '🎞️', color: 'oklch(0.722 0.177 306)' },
-    network:         { label: 'Network',         emoji: '🌐', color: 'oklch(0.773 0.154 163)' },
-    northwind:       { label: 'Northwind',       emoji: '🛒', color: 'oklch(0.837 0.164 84)' },
-    offshoreleaks:   { label: 'Offshore Leaks',  emoji: '🔍', color: 'oklch(0.705 0.187 48)' },
-    recommendations: { label: 'Recommendations', emoji: '⭐', color: 'oklch(0.861 0.173 92)' },
-    stackoverflow2:  { label: 'Stack Overflow',  emoji: '📚', color: 'oklch(0.637 0.208 25)' },
-    twitch:          { label: 'Twitch',          emoji: '🎮', color: 'oklch(0.627 0.233 304)' },
-    twitter:         { label: 'Twitter',         emoji: '🐦', color: 'oklch(0.714 0.143 255)' },
+    all:             { label: 'All',             emoji: '✦',  color: 'oklch(var(--text-highlight-lightness, 0.80) 0.203 284)' },
+    bluesky:         { label: 'Bluesky',         emoji: '🦋', color: 'oklch(var(--text-highlight-lightness, 0.80) 0.111 232)' },
+    buzzoverflow:    { label: 'BuzzOverflow',    emoji: '🐝', color: 'oklch(var(--text-highlight-lightness, 0.80) 0.123 80)' },
+    companies:       { label: 'Companies',       emoji: '🏢', color: 'oklch(var(--text-highlight-lightness, 0.80) 0.159 294)' },
+    fincen:          { label: 'FinCEN',          emoji: '💰', color: 'oklch(var(--text-highlight-lightness, 0.80) 0.180 152)' },
+    gameofthrones:   { label: 'Game of Thrones', emoji: '⚔️', color: 'oklch(var(--text-highlight-lightness, 0.80) 0.173 15)' },
+    grandstack:      { label: 'GrandStack',      emoji: '📍', color: 'oklch(var(--text-highlight-lightness, 0.80) 0.159 56)' },
+    movies:          { label: 'Movies',          emoji: '🎬', color: 'oklch(var(--text-highlight-lightness, 0.80) 0.110 214)' },
+    neoflix:         { label: 'Neoflix',         emoji: '🎞️', color: 'oklch(var(--text-highlight-lightness, 0.80) 0.177 306)' },
+    network:         { label: 'Network',         emoji: '🌐', color: 'oklch(var(--text-highlight-lightness, 0.80) 0.154 163)' },
+    northwind:       { label: 'Northwind',       emoji: '🛒', color: 'oklch(var(--text-highlight-lightness, 0.80) 0.164 84)' },
+    offshoreleaks:   { label: 'Offshore Leaks',  emoji: '🔍', color: 'oklch(var(--text-highlight-lightness, 0.80) 0.187 48)' },
+    recommendations: { label: 'Recommendations', emoji: '⭐', color: 'oklch(var(--text-highlight-lightness, 0.80) 0.173 92)' },
+    stackoverflow2:  { label: 'Stack Overflow',  emoji: '📚', color: 'oklch(var(--text-highlight-lightness, 0.80) 0.208 25)' },
+    twitch:          { label: 'Twitch',          emoji: '🎮', color: 'oklch(var(--text-highlight-lightness, 0.80) 0.233 304)' },
+    twitter:         { label: 'Twitter',         emoji: '🐦', color: 'oklch(var(--text-highlight-lightness, 0.80) 0.143 255)' },
   };
 
   // ─── API URL ────────────────────────────────────────────────────────────────
